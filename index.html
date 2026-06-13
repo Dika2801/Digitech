@@ -495,7 +495,7 @@
         }
 
         function redirectToWA(method) {
-            const nomorAdmin = "6281234567890"; // GANTI DENGAN NOMOR WHATSAPP ANDA SENDIRI
+            const nomorAdmin = "6285879324582"; // GANTI DENGAN NOMOR WHATSAPP ANDA SENDIRI
             const isiPesan = `Halo Admin Digitech, saya mau konfirmasi pembayaran.%0A%0A*DATA INVOICE*:%0A- User: ${localStorage.getItem('activeUser')}%0A- EA: ${selectedProduct}%0A- Nominal: ${selectedPriceText}%0A- Jalur: ${method}`;
             window.location.href = `whatsapp://send?phone=${nomorAdmin}&text=${isiPesan}`;
             closeModal('paymentModal');
