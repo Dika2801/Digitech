@@ -148,9 +148,14 @@
                 <div class="status-badge" id="invoiceStatusLabel">INTEGRASI QRIS & BANK AKTIF</div>
                 <p style="font-size:0.8rem; color:#94a3b8;">Silahkan isi nama akun Anda, pilih metode (QRIS/Bank), lalu selesaikan pembayaran di panel resmi bawah ini:</p>
                 
-                <!-- Membuka Portal Gerbang Saweria Asli (Anti Error Kotak Putih Kosong) -->
-                <iframe class="saweria-iframe-container" id="saweriaFrame" src=""></iframe>
-                
+                <!-- Membuka Portal Gerbang Saweria Asli (Anti Error Kotak Putih Kosong) -
+                <!-- KODE BARU SEBAGAI PENGGANTI: -->
+<div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; margin: 15px 0; text-align: left; border: 1px dashed #00f2fe;">
+    <p style="font-size: 0.85rem; color: #cbd5e1; margin-bottom: 5px;"><i class="fa-solid fa-circle-info" style="color:#00f2fe;"></i> <b>Panduan Verifikasi:</b></p>
+    <p style="font-size: 0.8rem; color: #94a3b8;">1. Selesaikan pembayaran di tab baru Saweria yang baru saja terbuka.</p>
+    <p style="font-size: 0.8rem; color: #94a3b8;">2. Salin kode referensi transaksi (contoh: <i>ref-xxxxxx</i>).</p>
+    <p style="font-size: 0.8rem; color: #94a3b8;">3. Tempelkan kode tersebut pada kolom di bawah ini untuk membuka akses unduhan otomatis.</p>
+</div>
                 <!-- Form Input Validasi Keamanan Token Uang Masuk -->
                 <div class="form-group">
                     <label style="color:#00f2fe; font-weight:bold;">Masukkan ID Transaksi Saweria Anda setelah bayar:</label>
@@ -179,16 +184,22 @@
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
         function checkPaymentAccess(product, price) {
-            if(!localStorage.getItem('activeUser')) { showToast("Wajib login!"); openModal('loginModal'); }
-            else { 
-                selectedProduct = product; rawPrice = price; 
+            if(!localStorage.getItem('activeUser')) { 
+                showToast("Wajib login!"); 
+                openModal('loginModal'); 
+            } else { 
+                selectedProduct = product; 
+                rawPrice = price; 
                 document.getElementById('payTitle').innerText = product; 
                 
-                // ⚠️ SILAHKAN GANTI "ToolsIndonesia" DENGAN USERNAME AKUN SAWERIA ANDA SENDIRI
+                // 1. ⚠️ GANTI "ToolsIndonesia" DENGAN USERNAME AKUN SAWERIA ANDA SENDIRI
                 const usernameSaweriaAnda = "ToolsIndonesia"; 
                 
-                // Memuat halaman bayar resmi ke dalam sistem website Anda
-                document.getElementById('saweriaFrame').src = `https://saweria.co/${usernameSaweriaAnda}`;
+                // 2. SISTEM OTOMATIS MEMBUKA HALAMAN SAWERIA DI TAB BARU (ANTI ERROR KOTAK PUTIH)
+                alert(`Anda akan diarahkan ke halaman pembayaran resmi Saweria.\n\nSetelah menyelesaikan pembayaran via QRIS/Bank, silakan SALIN ID Transaksi Anda dan masukkan ke kolom verifikasi di website ini untuk mengunduh file EA.`);
+                window.open(`https://saweria.co/${usernameSaweriaAnda}`, '_blank');
+                
+                // Buka modal di web kita untuk tempat memasukkan ID transaksi setelah mereka kembali
                 openModal('paymentModal'); 
             }
         }
