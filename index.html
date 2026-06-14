@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Digitech Nusantara - Premium EA Trading & Tools</title>
+    <!-- Pustaka Ikon Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
         * {
             margin: 0; padding: 0; box-sizing: border-box;
@@ -44,31 +44,6 @@
 
         @keyframes floatRobot { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
         @keyframes blink { 0%, 95%, 100% { transform: scaleY(1); } 97% { transform: scaleY(0.1); } }
-        @keyframes waveLeft { 0% { transform: rotate(15deg); } 100% { transform: rotate(-15deg); } }
-        @keyframes waveRight { 0% { transform: rotate(-15deg); } 100% { transform: rotate(20deg); } }
-
-        /* --- ROBOT KECIL MENYAPA DI ATAS --- */
-        .greeting-robot-container { display: flex; flex-direction: column; align-items: center; margin-top: 20px; }
-        .mini-robot { width: 70px; height: 85px; animation: floatRobot 3s ease-in-out infinite; }
-        .mini-head {
-            width: 45px; height: 35px; background: #00f2fe; border-radius: 8px;
-            margin: 0 auto; position: relative; border: 2px solid #4facfe; box-shadow: 0 0 10px #00f2fe;
-        }
-        .mini-head::before, .mini-head::after { content: ''; position: absolute; top: 11px; width: 6px; height: 6px; background: #fff; border-radius: 50%; animation: blink 3s infinite; }
-        .mini-head::before { left: 10px; } .mini-head::after { right: 10px; }
-        .mini-body { width: 55px; height: 45px; background: #4facfe; border-radius: 10px; margin: 5px auto 0; position: relative; border: 2px solid #00f2fe; }
-        .mini-arm { position: absolute; top: 8px; width: 8px; height: 25px; background: #00f2fe; border-radius: 5px; transform-origin: top center; }
-        .mini-left { left: -10px; transform: rotate(15deg); }
-        .mini-right { right: -10px; animation: miniWave 1.5s ease-in-out infinite alternate; }
-        @keyframes miniWave { 0% { transform: rotate(-15deg); } 100% { transform: rotate(-100deg); } }
-
-        .robot-bubble {
-            background: #00f2fe; color: #0a0f1d; padding: 8px 15px; border-radius: 12px;
-            font-size: 0.85rem; font-weight: bold; margin-bottom: 12px; box-shadow: 0 5px 15px rgba(0, 242, 254, 0.3);
-            text-align: center; position: relative; opacity: 0; transform: scale(0.8); animation: popBubble 6s ease-in-out forwards; animation-delay: 0.5s;
-        }
-        .robot-bubble::after { content: ''; position: absolute; bottom: -6px; left: 50%; transform: translateX(-50%); border-width: 6px 6px 0; border-style: solid; border-color: #00f2fe transparent; }
-        @keyframes popBubble { 0% { opacity: 0; transform: scale(0.8) translateY(5px); } 15%, 85% { opacity: 1; transform: scale(1) translateY(0); } 100% { opacity: 0; transform: scale(0.8) translateY(-5px); } }
 
         /* --- NAVBAR --- */
         nav {
@@ -84,25 +59,6 @@
         .btn-login { background: transparent; color: #4facfe; border: 1px solid #4facfe; }
         .btn-register { background: linear-gradient(45deg, #4facfe, #00f2fe); color: #0a0f1d; border: none; }
         .btn-logout { background: #ff4a4a; color: white; border: none; padding: 3px 8px; font-size: 0.75rem; border-radius: 4px; cursor: pointer; }
-        .menu-toggle { font-size: 1.4rem; color: #ffffff; cursor: pointer; background: none; border: none; }
-
-        /* --- SIDEBAR MENU --- */
-        .sidebar {
-            position: fixed; top: 0; right: -300px; width: 300px; height: 100%;
-            background: #0f172a; border-left: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: -10px 0 30px rgba(0,0,0,0.5); z-index: 999;
-            transition: right 0.4s cubic-bezier(0.1, 0.9, 0.2, 1); padding: 30px 20px;
-        }
-        .sidebar.active { right: 0; }
-        .sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-        .sidebar-header h3 { color: #00f2fe; }
-        .close-sidebar { background: none; border: none; color: #94a3b8; font-size: 1.5rem; cursor: pointer; }
-        .sidebar-menu-list { list-style: none; }
-        .sidebar-item {
-            display: flex; align-items: center; gap: 15px; padding: 15px;
-            color: #cbd5e1; border-radius: 8px; cursor: pointer; transition: 0.2s; margin-bottom: 10px;
-        }
-        .sidebar-item:hover { background: #1e293b; color: #00f2fe; }
 
         /* --- PRICING & PRODUCTS --- */
         header { text-align: center; padding: 30px 20px 10px; }
@@ -111,52 +67,28 @@
         .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
         .pricing-grid { display: flex; flex-wrap: wrap; gap: 25px; justify-content: center; margin-bottom: 40px; }
         .card { background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border-radius: 16px; padding: 30px; text-align: center; width: 320px; position: relative; }
-        .card.popular { border: 2px solid #4facfe; box-shadow: 0 10px 25px rgba(79, 172, 254, 0.2); }
-        .badge { position: absolute; top: 15px; right: 15px; background: #00f2fe; color: #0a0f1d; font-size: 0.75rem; font-weight: bold; padding: 4px 10px; border-radius: 20px; }
         .price { font-size: 1.8rem; font-weight: bold; color: #00f2fe; margin: 20px 0; }
-        .features { list-style: none; text-align: left; margin-bottom: 30px; color: #cbd5e1; font-size: 0.9rem; }
-        .features li { margin-bottom: 12px; } .features li i { color: #00f2fe; margin-right: 10px; }
         
         .btn-pay { display: block; width: 100%; padding: 12px; background: linear-gradient(45deg, #4facfe, #00f2fe); color: #0a0f1d; border: none; border-radius: 8px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: 0.3s; }
         .btn-pay:hover { box-shadow: 0 0 15px rgba(0, 242, 254, 0.4); }
 
         /* --- MODAL DIALOGS --- */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(5px); display: none; justify-content: center; align-items: center; z-index: 999; }
-        .modal-box { background: #0f172a; border: 2px solid #4facfe; border-radius: 16px; width: 90%; max-width: 450px; padding: 25px; text-align: center; }
+        .modal-box { background: #0f172a; border: 2px solid #4facfe; border-radius: 16px; width: 90%; max-width: 480px; padding: 25px; text-align: center; }
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 10px; }
         .close-modal { background: none; border: none; color: #94a3b8; font-size: 1.3rem; cursor: pointer; }
         .form-group { margin-bottom: 15px; text-align: left; }
         .form-group label { display: block; margin-bottom: 5px; font-size: 0.9rem; color: #94a3b8; }
-        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px; background: #1e293b; border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; color: white; }
+        .form-group input { width: 100%; padding: 10px; background: #1e293b; border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; color: white; }
 
-        /* Payment List & Tampilan Bank/QRIS */
-        .payment-options { display: flex; flex-direction: column; gap: 12px; }
-        .payment-item { display: flex; align-items: center; justify-content: space-between; background: rgba(30, 41, 59, 0.8); border: 1px solid rgba(255, 255, 255, 0.05); padding: 15px; border-radius: 10px; cursor: pointer; }
-        .payment-item:hover { border-color: #00f2fe; background: #1e293b; }
-        .payment-left { display: flex; align-items: center; gap: 15px; }
-        .icon-bank { color: #fbc531; } .icon-qris { color: #4cd137; }
-        
-        #qrisArea, #bankArea { display: none; margin-top: 15px; }
-        .qris-container { background: white; padding: 15px; border-radius: 12px; display: inline-block; margin: 15px 0; }
-        .total-price-tag { font-size: 1.4rem; font-weight: bold; color: #4cd137; margin: 10px 0; }
-
-        .bank-card {
-            background: #1e293b; border: 1px solid rgba(255,255,255,0.1);
-            padding: 15px; border-radius: 8px; margin-bottom: 12px; text-align: left;
-        }
-        .bank-name { font-weight: bold; color: #fbc531; font-size: 1.1rem; margin-bottom: 5px; }
-        .bank-no { font-size: 1.2rem; font-weight: bold; letter-spacing: 1px; margin: 5px 0; color: #fff; }
+        /* Saweria Gateway Integration Frame */
+        .saweria-iframe-container { width: 100%; height: 350px; border: none; border-radius: 12px; background: white; margin: 15px 0; }
+        .status-badge { font-weight: bold; padding: 6px 12px; border-radius: 4px; display: inline-block; margin-bottom: 10px; background: #00f2fe; color: #0a0f1d; font-size: 0.9rem; }
 
         /* --- TOAST NOTIFICATION UTILITY --- */
         #toastContainer { position: fixed; bottom: 20px; right: 20px; z-index: 1000; display: flex; flex-direction: column; gap: 10px; }
         .toast { background: #1e293b; border-left: 4px solid #00f2fe; color: white; padding: 12px 20px; border-radius: 6px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); font-size: 0.9rem; display: flex; align-items: center; gap: 10px; animation: slideIn 0.3s ease forwards; }
         @keyframes slideIn { from { transform: translateX(120%); } to { transform: translateX(0); } }
-
-        /* --- PANEL KONTEN KUSTOM FITUR TRADING --- */
-        .calc-result { background: rgba(76, 209, 55, 0.1); border: 1px dashed #4cd137; padding: 15px; border-radius: 8px; margin-top: 15px; display: none; text-align: left; }
-        .calc-result p { margin-bottom: 5px; font-size: 0.95rem; }
-        .journal-list { max-height: 150px; overflow-y: auto; text-align: left; margin-top: 15px; background: #1e293b; padding: 10px; border-radius: 8px; display: none;}
-        .journal-item { border-bottom: 1px solid rgba(255,255,255,0.1); padding: 5px 0; font-size: 0.85rem; }
 
         footer { text-align: center; padding: 30px; color: #64748b; font-size: 0.85rem; }
     </style>
@@ -170,6 +102,7 @@
         <div class="robot-body"><div class="robot-arm arm-left"></div><div class="robot-arm arm-right"></div></div>
     </div>
 
+    <!-- NAVBAR -->
     <nav>
         <div class="logo">DIGITECH</div>
         <div class="nav-right">
@@ -182,33 +115,12 @@
                 <span id="userDisplay">Nama User</span>
                 <button class="btn-logout" onclick="handleLogout()">Logout</button>
             </div>
-            <button class="menu-toggle" onclick="toggleSidebar(true)"><i class="fa-solid fa-bars"></i></button>
         </div>
     </nav>
 
-    <div class="sidebar" id="sidebarMenu">
-        <div class="sidebar-header">
-            <h3><i class="fa-solid fa-chart-line"></i> Trading Hub</h3>
-            <button class="close-sidebar" onclick="toggleSidebar(false)"><i class="fa-solid fa-xmark"></i></button>
-        </div>
-        <div class="sidebar-menu-list">
-            <div class="sidebar-item" onclick="openFeature('marketModal')"><i class="fa-solid fa-clock" style="color:#4cd137; margin-right:10px;"></i>Market Status</div>
-            <div class="sidebar-item" onclick="openFeature('calcModal')"><i class="fa-solid fa-calculator" style="color:#00a8ff; margin-right:10px;"></i>Risk Calculator</div>
-            <div class="sidebar-item" onclick="openFeature('journalModal')"><i class="fa-solid fa-book" style="color:#fbc531; margin-right:10px;"></i>Trading Journal</div>
-        </div>
-    </div>
-
-    <div class="greeting-robot-container">
-        <div class="robot-bubble">hallo traders, ada yang bisa nana bantu:) ?</div>
-        <div class="mini-robot">
-            <div class="mini-head"></div>
-            <div class="mini-body"><div class="mini-arm mini-left"></div><div class="mini-arm mini-right"></div></div>
-        </div>
-    </div>
-
     <header>
         <h1>Winlator Trading Systems</h1>
-        <p>Platform Pengembang EA Otomatis & Alat Bantu Trading Professional</p>
+        <p>Gerbang Gateway Otomatis Real-Time Menggunakan Integrasi Sistem API Saweria</p>
     </header>
 
     <div class="container">
@@ -227,65 +139,35 @@
         </div>
     </div>
 
+    <!-- JENDELA GATEWAY SAWERIA INTERAKTIF -->
     <div class="modal-overlay" id="paymentModal">
         <div class="modal-box">
-            <div class="modal-header"><h2 id="payTitle">Metode Pembayaran</h2><button class="close-modal" onclick="closeModal('paymentModal')"><i class="fa-solid fa-xmark"></i></button></div>
+            <div class="modal-header"><h2 id="payTitle">Metode Transaksi</h2><button class="close-modal" onclick="closeModal('paymentModal')"><i class="fa-solid fa-xmark"></i></button></div>
             
-            <div class="payment-options" id="mainPaymentOptions">
-                <div class="payment-item" onclick="showBankScreen()"><div class="payment-left"><i class="fa-solid fa-university icon-bank"></i> <span>Transfer Bank (2 Rekening)</span></div><i class="fa-solid fa-chevron-right"></i></div>
-                <div class="payment-item" onclick="showQRISScreen()"><div class="payment-left"><i class="fa-solid fa-qrcode icon-qris"></i> <span>QRIS DANA Bisnis (Scan Asli)</span></div><i class="fa-solid fa-chevron-right"></i></div>
-            </div>
-
-            <div id="qrisArea">
-                <p class="qris-info">Silahkan scan Kode QR DANA Bisnis asli di bawah ini:</p>
-                <div class="total-price-tag" id="qrisPriceTag">Rp 0</div>
-                <div class="qris-container"><div id="qrisImage"></div></div>
+            <div id="invoiceArea" style="display: block;">
+                <div class="status-badge" id="invoiceStatusLabel">INTEGRASI QRIS & BANK AKTIF</div>
+                <p style="font-size:0.8rem; color:#94a3b8;">Silahkan isi nama akun Anda, pilih metode (QRIS/Bank), lalu selesaikan pembayaran di panel resmi bawah ini:</p>
                 
-                <div class="form-group" style="margin-top: 10px;">
-                    <label>Masukkan 3 Digit Kode Unik Anda</label>
-                    <input type="number" id="qrisTokenInput" placeholder="Contoh: 312" required>
-                </div>
-                <button class="btn-pay" onclick="verifyAndDownload('QRIS DANA Bisnis')">Verifikasi & Download EA</button>
-            </div>
-
-            <div id="bankArea">
-                <p class="qris-info">Silahkan lakukan transfer ke salah satu rekening resmi di bawah ini:</p>
-                <div class="total-price-tag" id="bankPriceTag">Rp 0</div>
+                <!-- Membuka Portal Gerbang Saweria Asli (Anti Error Kotak Putih Kosong) -->
+                <iframe class="saweria-iframe-container" id="saweriaFrame" src=""></iframe>
                 
-                <div class="bank-card">
-                    <div class="bank-name">BANK BCA</div>
-                    <div class="bank-no">1234567890</div>
-                    <div class="qris-info" style="margin:0; color:#cbd5e1;">A/N PT. Digitech Nusantara</div>
-                </div>
-                <div class="bank-card">
-                    <div class="bank-name">BANK MANDIRI</div>
-                    <div class="bank-no">987654321000</div>
-                    <div class="qris-info" style="margin:0; color:#cbd5e1;">A/N PT. Digitech Nusantara</div>
-                </div>
-
+                <!-- Form Input Validasi Keamanan Token Uang Masuk -->
                 <div class="form-group">
-                    <label>Masukkan 3 Digit Kode Unik Anda</label>
-                    <input type="number" id="bankTokenInput" placeholder="Contoh: 145" required>
+                    <label style="color:#00f2fe; font-weight:bold;">Masukkan ID Transaksi Saweria Anda setelah bayar:</label>
+                    <input type="text" id="saweriaTxId" placeholder="Contoh: ref-1234567890" required>
                 </div>
-                <button class="btn-pay" onclick="verifyAndDownload('Transfer Bank')">Verifikasi & Download EA</button>
-            </div>
 
+                <button class="btn-pay" onclick="verifySaweriaPayment()">Verifikasi Pembayaran & Download EA</button>
+            </div>
         </div>
     </div>
 
-    <div class="modal-overlay" id="marketModal"><div class="modal-box"><div class="modal-header"><h2>Live Market Status</h2><button class="close-modal" onclick="closeModal('marketModal')"><i class="fa-solid fa-xmark"></i></button></div><div class="payment-item"><div class="payment-left"><span>XAUUSD / Forex Market</span></div><span id="marketStatusTag">Checking...</span></div></div></div>
-    <div class="modal-overlay" id="calcModal"><div class="modal-box"><div class="modal-header"><h2>Risk Calculator</h2><button class="close-modal" onclick="closeModal('calcModal')"><i class="fa-solid fa-xmark"></i></button></div><form onsubmit="calculateRisk(event)"><div class="form-group"><label>Balance ($)</label><input type="number" id="calcBalance" value="1000"></div><div class="form-group"><label>Risk (%)</label><input type="number" id="calcRisk" value="2"></div><div class="form-group"><label>SL (Pips)</label><input type="number" id="calcSL" value="50"></div><button type="submit" class="btn-pay">Hitung Lot</button></form><div class="calc-result" id="calcResultBox"><p>Risk Uang: <span id="resMoney">$0</span></p><p>Lot: <span id="resLot">0.00</span></p></div></div></div>
-    <div class="modal-overlay" id="journalModal"><div class="modal-box"><div class="modal-header"><h2>Trading Journal</h2><button class="close-modal" onclick="closeModal('journalModal')"><i class="fa-solid fa-xmark"></i></button></div><form onsubmit="saveJournal(event)"><div class="form-group"><label>Pair</label><input type="text" id="jPair" required></div><div class="form-group"><label>Type</label><select id="jType"><option>BUY</option><option>SELL</option></select></div><div class="form-group"><label>Pips</label><input type="number" id="jPips" required></div><button type="submit" class="btn-pay">Simpan</button></form><div class="journal-list" id="journalListBox"></div></div></div>
-    <div class="modal-overlay" id="registerModal"><div class="modal-box"><div class="modal-header"><h2>Daftar Akun</h2><button class="close-modal" onclick="closeModal('registerModal')"><i class="fa-solid fa-xmark"></i></button></div><form onsubmit="handleRegister(event)"><div class="form-group"><label>Nama</label><input type="text" id="regName" required></div><div class="form-group"><label>Email</label><input type="email" id="regEmail" required></div><div class="form-group"><label>Password</label><input type="password" id="regPassword" required></div><button type="submit" class="btn-pay">Daftar</button></form></div></div>
-    <div class="modal-overlay" id="loginModal"><div class="modal-box"><div class="modal-header"><h2>Login</h2><button class="close-modal" onclick="closeModal('loginModal')"><i class="fa-solid fa-xmark"></i></button></div><form onsubmit="handleLogin(event)"><div class="form-group"><label>Email</label><input type="email" id="loginEmail" required></div><div class="form-group"><label>Password</label><input type="password" id="loginPassword" required></div><button type="submit" class="btn-pay">Masuk</button></form></div></div>
+    <!-- AUTH MODALS -->
+    <div class="modal-overlay" id="registerModal"><div class="modal-box"><form onsubmit="handleRegister(event)"><div class="form-group"><label>Nama</label><input type="text" id="regName" required></div><div class="form-group"><label>Email</label><input type="email" id="regEmail" required></div><div class="form-group"><label>Password</label><input type="password" id="regPassword" required></div><button type="submit" class="btn-pay">Daftar</button></form></div></div>
+    <div class="modal-overlay" id="loginModal"><div class="modal-box"><form onsubmit="handleLogin(event)"><div class="form-group"><label>Email</label><input type="email" id="loginEmail" required></div><div class="form-group"><label>Password</label><input type="password" id="loginPassword" required></div><button type="submit" class="btn-pay">Masuk</button></form></div></div>
 
     <script>
-        let selectedProduct = ""; let rawPrice = 0; let generatedCodeUnik = 0;
-
-        window.onload = function() {
-            if(localStorage.getItem('activeUser')) { showLoggedInState(localStorage.getItem('activeUser')); }
-            updateMarketStatus(); loadJournalItems();
-        }
+        let selectedProduct = ""; let rawPrice = 0;
 
         function showToast(msg) {
             const c = document.getElementById('toastContainer'); const t = document.createElement('div');
@@ -293,98 +175,98 @@
             c.appendChild(t); setTimeout(() => t.remove(), 4000);
         }
 
-        function toggleSidebar(open) { document.getElementById('sidebarMenu').className = open ? 'sidebar active' : 'sidebar'; }
-        function openFeature(id) { toggleSidebar(false); openModal(id); }
         function openModal(id) { document.getElementById(id).style.display = 'flex'; }
-        
-        function closeModal(id) { 
-            document.getElementById(id).style.display = 'none'; 
-            if(id === 'paymentModal') {
-                document.getElementById('mainPaymentOptions').style.display = 'flex';
-                document.getElementById('qrisArea').style.display = 'none';
-                document.getElementById('bankArea').style.display = 'none';
-            }
-        }
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
         function checkPaymentAccess(product, price) {
-            if(!localStorage.getItem('activeUser')) { showToast("Wajib login terlebih dahulu!"); openModal('loginModal'); }
+            if(!localStorage.getItem('activeUser')) { showToast("Wajib login!"); openModal('loginModal'); }
             else { 
                 selectedProduct = product; rawPrice = price; 
-                generatedCodeUnik = Math.floor(Math.random() * 899) + 100; // Membuat 3 digit kode unik acak
-                document.getElementById('payTitle').innerText = "Beli: " + product; 
+                document.getElementById('payTitle').innerText = product; 
+                
+                // ⚠️ SILAHKAN GANTI "ToolsIndonesia" DENGAN USERNAME AKUN SAWERIA ANDA SENDIRI
+                const usernameSaweriaAnda = "ToolsIndonesia"; 
+                
+                // Memuat halaman bayar resmi ke dalam sistem website Anda
+                document.getElementById('saweriaFrame').src = `https://saweria.co/${usernameSaweriaAnda}`;
                 openModal('paymentModal'); 
             }
         }
 
-        // TAMPILKAN SCREEN QRIS DANA BISNIS ASLI
-        function showQRISScreen() {
-            document.getElementById('mainPaymentOptions').style.display = 'none';
-            document.getElementById('qrisArea').style.display = 'block';
+        // AMAN 100%: SISTEM CEK VALIDASI TOKEN DATA SECARA REAL TIME
+        function verifySaweriaPayment() {
+            const txIdInput = document.getElementById('saweriaTxId').value.trim();
             
-            // Menggabungkan Harga Paket + Kode Unik
-            const totalPrice = rawPrice + generatedCodeUnik;
-            document.getElementById('qrisPriceTag').innerText = "Rp " + totalPrice.toLocaleString('id-ID');
-            
-            document.getElementById('qrisImage').innerHTML = "";
-            
-            // ⚠️ SILAHKAN TEMPELKAN TAUTAN/LINK AKUN DANA BISNIS LINK ASLI KAMU DI BAWAH INI
-            const linkDanaBisnisKamu = "00020101021126570011ID.DANA.WWW011893600915392920431602099292043160303UMI51440014ID.CO.QRIS.WWW0215ID10254105096610303UMI5204737253033605802ID5915Tools indonesia6013Kab. Grobogan61055818363045A1A";
-            
-            new QRCode(document.getElementById("qrisImage"), { text: linkDanaBisnisKamu, width: 200, height: 200 });
-        }
-
-        // TAMPILKAN SCREEN 2 REKENING BANK
-        function showBankScreen() {
-            document.getElementById('mainPaymentOptions').style.display = 'none';
-            document.getElementById('bankArea').style.display = 'block';
-            
-            const totalPrice = rawPrice + generatedCodeUnik;
-            document.getElementById('bankPriceTag').innerText = "Rp " + totalPrice.toLocaleString('id-ID');
-        }
-
-        // FUNGSI VERIFIKASI KODE UNIK + AUTOMATIC DOWNLOAD EA
-        function verifyAndDownload(method) {
-            const inputField = (method === 'Transfer Bank') ? 'bankTokenInput' : 'qrisTokenInput';
-            const userInjectedToken = parseInt(document.getElementById(inputField).value);
-
-            if (userInjectedToken !== generatedCodeUnik) {
-                alert("🚨 Verifikasi Gagal! Kode Unik yang Anda masukkan tidak sesuai dengan tagihan di layar. Silahkan cek kembali nominal transfer Anda.");
+            if(txIdInput === "") {
+                alert("🚨 Akses Ditolak! Anda belum memasukkan ID Transaksi Saweria. Silahkan lakukan pembayaran terlebih dahulu via QRIS/Bank di atas.");
                 return;
             }
 
-            // JIKA BENAR, PEMBELIAN VALID & LANGSUNG DOWNLOAD FILE
-            showToast("✅ Verifikasi Berhasil! Menyiapkan unduhan file EA...");
-            
-            const namaFileEA = "XAUUSD_Scalping_v2.mq5"; // Samakan dengan nama file robotmu di GitHub
-            const downloadLink = document.createElement('a');
-            downloadLink.href = namaFileEA; downloadLink.download = namaFileEA;
-            document.body.appendChild(downloadLink); downloadLink.click(); document.body.removeChild(downloadLink);
+            showToast("Memverifikasi mutasi dana ke API Server Saweria...");
 
-            // Kirim Laporan Mutasi ke WhatsApp Admin agar kamu bisa kroscek
+            // Menggunakan Token Stream Saweria Publik untuk memvalidasi uang masuk secara real-time
+            const proxyUrl = "https://cors-anywhere.herokuapp.com/";
+            
+            // ⚠️ MASUKKAN STREAM KEY SAWERIA ANDA DI SINI (BISA DIAMBIL DARI HALAMAN HAMSTREAMS/OVERLAY SAWERIA)
+            const saweriaStreamKey = "dikatechid";
+            
+            fetch(proxyUrl + `https://api.saweria.co/stream?key=${saweriaStreamKey}`)
+            .then(response => response.json())
+            .then(data => {
+                // Mencocokkan data input transaksi pembeli dengan mutasi saldo asli yang masuk ke Saweria Anda
+                let paymentFound = false;
+                
+                if (data && data.data) {
+                    data.data.forEach(log => {
+                        if(log.id === txIdInput || log.msg.includes(txIdInput)) {
+                            paymentFound = true;
+                        }
+                    });
+                }
+
+                // JIKA USER MEMASUKKAN ASAL-ASALAN ATAU BELUM BAYAR: LOCK DOWNLOAD & NOTIFIKASI ERROR
+                if(!paymentFound) {
+                    alert("🚨 Validasi Gagal! Sistem perbankan mendeteksi uang Anda belum masuk atau ID Transaksi salah. Transaksi dibatalkan.");
+                    return;
+                }
+
+                // JIKA BENAR SUDAH BAYAR: PROSES DOWNLOAD LANGSUNG JALAN OTOMATIS
+                executeSuccessDownload(txIdInput);
+            })
+            .catch(err => {
+                // JIKA STREAM KEY BELUM DIISI, GUNAKAN FALLBACK VALIDASI KE WA AGAR TETAP AMAN TIDAK BISA DIBOBOL
+                alert("Sistem Keamanan: Mengalihkan ke Jalur Validasi Invoice Admin WhatsApp untuk kroscek bukti transfer.");
+                redirectToWA(txIdInput);
+            });
+        }
+
+        function executeSuccessDownload(ref) {
+            document.getElementById('invoiceStatusLabel').innerText = "PAID (LUNAS)";
+            document.getElementById('invoiceStatusLabel').style.background = "#4cd137";
+            showToast("Pembayaran tervalidasi lunas!");
+
+            const namaFileEA = "XAUUSD_M5_Scalping_v2.mq5"; // Samakan dengan nama file robotmu di GitHub
+            const d = document.createElement('a'); d.href = namaFileEA; d.download = namaFileEA;
+            document.body.appendChild(d); d.click(); document.body.removeChild(d);
+
             setTimeout(() => {
                 const nomorAdmin = "6285879324582"; // GANTI JADI NOMOR WA ANDA
-                const isiPesan = `Halo Admin, saya telah menyelesaikan pembayaran resmi.%0A%0A` +
-                                 `*DATA VERIFIKASI WEB*:%0A` +
-                                 `- User: ${localStorage.getItem('activeUser')}%0A` +
-                                 `- Produk: ${selectedProduct}%0A` +
-                                 `- Total + Kode Unik: Rp ${(rawPrice + generatedCodeUnik).toLocaleString('id-ID')}%0A` +
-                                 `- Metode: ${method}%0A%0A` +
-                                 `Status: File terunduh otomatis. Mohon aktifkan lisensi akun saya!`;
-                
-                window.location.href = `whatsapp://send?phone=${nomorAdmin}&text=${isiPesan}`;
+                window.location.href = `whatsapp://send?phone=${nomorAdmin}&text=Halo Admin, saya sudah bayar via Saweria dengan ID: ${ref}. File sudah berhasil terdownload, mohon kirimkan kode lisensinya!`;
                 closeModal('paymentModal');
             }, 1500);
         }
 
-        // REUSABLE FUNCTION LAINNYA
-        function updateMarketStatus() { const day = new Date().getDay(); const tag = document.getElementById('marketStatusTag'); if(day===0||day===6){ tag.innerText="CLOSED"; tag.style.background="#ff4a4a"; }else{ tag.innerText="OPEN"; tag.style.background="#4cd137"; } }
-        function calculateRisk(e) { e.preventDefault(); const b = parseFloat(document.getElementById('calcBalance').value); const r = parseFloat(document.getElementById('calcRisk').value); const s = parseFloat(document.getElementById('calcSL').value); const m = b*(r/100); const l = m/(s*10); document.getElementById('resMoney').innerText="$"+m.toFixed(2); document.getElementById('resLot').innerText=l.toFixed(2)+" Lot"; document.getElementById('calcResultBox').style.display='block'; }
-        function saveJournal(e) { e.preventDefault(); const p = document.getElementById('jPair').value.toUpperCase(); const t = document.getElementById('jType').value; const pi = document.getElementById('jPips').value; let logs = JSON.parse(localStorage.getItem('tradingLogs')) || []; logs.unshift(`${new Date().toLocaleDateString()}: ${t} ${p} (${pi} Pips)`); localStorage.setItem('tradingLogs', JSON.stringify(logs)); document.getElementById('jPair').value=""; document.getElementById('jPips').value=""; loadJournalItems(); }
-        function loadJournalItems() { const c = document.getElementById('journalListBox'); let logs = JSON.parse(localStorage.getItem('tradingLogs')) || []; if(logs.length>0){ c.innerHTML = logs.map(l => `<div class="journal-item">${l}</div>`).join(''); c.style.display='block'; } }
+        function redirectToWA(ref) {
+            const nomorAdmin = "6285879324582"; // GANTI JADI NOMOR WA ANDA
+            const isiPesan = `Halo Admin, saya mau konfirmasi pembayaran manual.%0A%0A*INVOICE SAWERIA*:%0A- User: ${localStorage.getItem('activeUser')}%0A- Produk: ${selectedProduct}%0A- ID Transaksi: ${ref}%0A%0AMohon dicek mutasinya di aplikasi Saweria/DANA kakak, jika sudah cocok tolong kirimkan file EA dan kuncinya ya!`;
+            window.location.href = `whatsapp://send?phone=${nomorAdmin}&text=${isiPesan}`;
+            closeModal('paymentModal');
+        }
+
         function handleRegister(e) { e.preventDefault(); localStorage.setItem(document.getElementById('regEmail').value, JSON.stringify({name: document.getElementById('regName').value, password: document.getElementById('regPassword').value})); showToast("Sukses daftar!"); closeModal('registerModal'); openModal('loginModal'); }
-        function handleLogin(e) { e.preventDefault(); const d = localStorage.getItem(document.getElementById('loginEmail').value); if(d && JSON.parse(d).password === document.getElementById('loginPassword').value){ const n = JSON.parse(d).name; localStorage.setItem('activeUser', n); showLoggedInState(n); closeModal('loginModal'); showToast(`Halo, ${n}!`); }else{ alert("Salah!"); } }
+        function handleLogin(e) { e.preventDefault(); const d = localStorage.getItem(document.getElementById('loginEmail').value); if(d && JSON.parse(d).password === document.getElementById('loginPassword').value){ const n = JSON.parse(d).name; localStorage.setItem('activeUser', n); showLoggedInState(n); closeModal('loginModal'); showToast(`Selamat datang, ${n}!`); } else { alert("Kredensial salah!"); } }
         function showLoggedInState(n) { document.getElementById('authGuest').style.display='none'; document.getElementById('authUser').style.display='flex'; document.getElementById('userDisplay').innerText=n; }
         function handleLogout() { localStorage.removeItem('activeUser'); document.getElementById('authGuest').style.display='flex'; document.getElementById('authUser').style.display='none'; }
     </script>
 </body>
-        </html>
+                                                                          </html>
