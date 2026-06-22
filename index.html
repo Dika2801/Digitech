@@ -45,13 +45,27 @@
             opacity: 0.15; pointer-events: none; z-index: -1;
         }
 
-        /* --- MINI ROBOT UTUH DENGAN STRUKTUR LAPTOP --- */
+        /* --- MINI ROBOT UTUH --- */
         .robot-container {
             position: fixed;
             top: 15px; left: 15px;
             display: flex; flex-direction: column; align-items: center;
             z-index: 1000; animation: float 3s ease-in-out infinite;
             transform: scale(0.85);
+        }
+
+        /* POPUP SAPAAN ROBOT (TIDAK AKAN HILANG) */
+        .bubble-chat {
+            background: #ffffff; color: #000000; padding: 5px 12px; border-radius: 8px;
+            font-size: 10px; font-weight: bold; margin-bottom: 6px; position: relative;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            white-space: nowrap;
+        }
+
+        .bubble-chat::after {
+            content: ''; position: absolute; bottom: -5px; left: 50%;
+            transform: translateX(-50%); border-width: 5px 5px 0;
+            border-style: solid; border-color: #ffffff transparent;
         }
 
         .mini-robot-head {
@@ -116,6 +130,15 @@
         .hero-right-content h1 { font-size: 34px; font-weight: 700; margin-bottom: 15px; }
 
         .interactive-zone { background: var(--card-dark); border: 1px solid rgba(255,255,255,0.04); border-radius: 20px; padding: 20px; }
+
+        /* --- ANIMASI TULISAN BERGERAK KE KIRI --- */
+        .running-text-container {
+            width: 100%; overflow: hidden; background: rgba(255, 55, 55, 0.1); border: 1px solid rgba(255, 55, 55, 0.2); padding: 8px; border-radius: 8px; margin-bottom: 15px;
+        }
+        .running-text {
+            display: inline-block; white-space: nowrap; color: #ff5555; font-size: 11.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; padding-left: 100%; animation: marquee 15s linear infinite;
+        }
+
         .upload-area { border: 2px dashed rgba(0, 255, 170, 0.2); border-radius: 12px; padding: 25px 15px; text-align: center; cursor: pointer; background: rgba(0, 0, 0, 0.3); margin-bottom: 15px; }
         #preview { max-width: 100%; max-height: 180px; border-radius: 8px; display: none; margin: 0 auto; }
 
@@ -141,6 +164,7 @@
             .big-robot-screen { width: 130px; height: 95px; }
             .big-robot-eye { width: 28px; height: 28px; }
         }
+        @keyframes marquee { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
         @keyframes float { 0%, 100% { transform: translateY(0) scale(0.85); } 50% { transform: translateY(-6px) scale(0.85); } }
         @keyframes blink { 0%, 90%, 100% { transform: scaleY(1); } 95% { transform: scaleY(0.1); } }
         @keyframes screenGlow { from { background: rgba(0, 255, 170, 0.15); } to { background: rgba(0, 255, 170, 0.35); } }
@@ -152,8 +176,8 @@
         <path fill="none" stroke="#00ffaa" stroke-width="2" d="M0,224L60,208C120,192,240,160,360,165.3C480,171,600,213,720,208C840,203,960,149,1080,138.7C1200,128,1320,160,1380,176L1440,192"></path>
     </svg>
 
-    <!-- MINI ROBOT DENGAN LAPTOP MINI -->
     <div class="robot-container" id="miniRobot">
+        <div class="bubble-chat">Halo! Yuk upload chartmu..</div>
         <div class="mini-robot-head">
             <div class="mini-robot-face"><div class="mini-robot-eye"></div><div class="mini-robot-eye"></div></div>
         </div>
@@ -173,10 +197,14 @@
         </div>
 
         <div class="hero-right-content">
-            <div class="tag-badge">✓ Gemini Smart Tab System Active</div>
+            <div class="tag-badge">✓ Dika AI Smart Tab System Active</div>
             <h1>The Fastest and Secure<br><span style="color: var(--primary-glow);">AI Trading Assistant.</span></h1>
 
             <div class="interactive-zone">
+                <div class="running-text-container">
+                    <div class="running-text">sebelum menggunakan ai ini pastikan anda sudah memiliki api key gemini</div>
+                </div>
+
                 <div class="upload-area" onclick="document.getElementById('fileInput').click()">
                     <input type="file" id="fileInput" accept="image/*" style="display:none;" onchange="previewImage(event)">
                     <div id="uploadText">
@@ -188,10 +216,8 @@
 
                 <button class="btn-action" id="btnAnalyze" onclick="mulaiAnalisa()" disabled>Mulai Analisa →</button>
                 
-                <!-- LOADING STATUS AREA -->
                 <div class="status-box" id="statusBox"></div>
 
-                <!-- WRAPPER HASIL TAMPILAN TAB YANG EFISIEN -->
                 <div class="result-wrapper" id="resultWrapper">
                     <div class="tab-header">
                         <button class="tab-btn active" onclick="switchTab('trend')">📊 Trend & Market</button>
@@ -212,7 +238,6 @@
         let base64Image = "";
         let imageMimeType = "image/jpeg";
         
-        // Memori Penyimpanan Data Tab Terpisah
         let dataAnalisa = { trend: "", entry: "", tpsl: "" };
 
         function previewImage(event) {
@@ -250,13 +275,11 @@
             statusBox.style.display = "block";
             statusBox.innerHTML = "Robot membuka laptop...<br>Mengalkulasi struktur candlestick via Gemini API...";
             
-            // AKTIFKAN ANIMASI BUKA LAPTOP PADA ROBOT MINI
             robot.classList.add('analyzing');
 
-            // Intruksi khusus meminta data terpisah dengan pemisah tag khusus agar mudah dipotong javascript
             const promptNarasi = "Analisa chart trading ini. Kamu wajib memberikan respon dengan memisahkannya ke dalam 3 bagian menggunakan format tag persis seperti ini:\n[TREND] tulis analisa tren, struktur pasar, dan indikator di sini [/TREND]\n[ENTRY] tulis rekomendasi posisi buy/sell/wait dan angka harga masuk di sini [/ENTRY]\n[TPSL] tulis target angka batas take profit dan stop loss di sini [/TPSL]";
 
-            const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+            const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
             const payload = { contents: [{ parts: [{ text: promptNarasi }, { inlineData: { mimeType: imageMimeType, data: base64Image } }] }] };
 
             try {
@@ -271,23 +294,20 @@
 
                 const textHasil = data.candidates[0].content.parts[0].text;
                 
-                // PARSING/MEMOTONG TEKS MENJADI FORMAT TAB YANG BERSIH
                 dataAnalisa.trend = parseTag(textHasil, "TREND");
                 dataAnalisa.entry = parseTag(textHasil, "ENTRY");
                 dataAnalisa.tpsl = parseTag(textHasil, "TPSL");
 
-                // Jika pemotongan gagal karena AI lupa cetak tag, isi dengan fallback default
                 if(!dataAnalisa.trend) dataAnalisa.trend = textHasil;
 
                 statusBox.style.display = "none";
                 resultWrapper.style.display = "block";
-                switchTab('trend'); // Buka tab pertama otomatis
+                switchTab('trend');
 
             } catch (error) {
                 statusBox.innerHTML = "<span style='color:#ff5555;'>Gagal menyambung ke server Google Studio.</span>";
             } finally {
                 btn.disabled = false;
-                // TUTUP KEMBALI LAPTOP ROBOT
                 robot.classList.remove('analyzing');
             }
         }
@@ -302,7 +322,6 @@
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             document.getElementById('tabContent').innerHTML = dataAnalisa[tabName] || "Data tidak ditemukan.";
             
-            // Beri warna aktif pada tombol tab yang dipilih
             const indexMap = { 'trend': 0, 'entry': 1, 'tpsl': 2 };
             document.querySelectorAll('.tab-btn')[indexMap[tabName]].classList.add('active');
         }
@@ -310,8 +329,8 @@
         function copyResult() {
             const gabunganTeks = `== STRATEGI DIKA AI ==\n\n[1. Trend & Market]\n${dataAnalisa.trend.replace(/<br>/g, '\n').replace(/<\/?[^>]+(>|$)/g, "")}\n\n[2. Entry Area]\n${dataAnalisa.entry.replace(/<br>/g, '\n').replace(/<\/?[^>]+(>|$)/g, "")}\n\n[3. Target TP & SL]\n${dataAnalisa.tpsl.replace(/<br>/g, '\n').replace(/<\/?[^>]+(>|$)/g, "")}`;
             navigator.clipboard.writeText(gabunganTeks);
-            alert("Strategi trading berhasil disalin ke clipboard!");
+            alert("Strategi trading berhasil disalin!");
         }
     </script>
 </body>
-</html>
+    </html>
