@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dika Ai Analisa Trading</title>
+    <style>
+        :root {
+            --bg-color: #060b08;
+            --primary-glow: #00ffaa;
+            --robot-green: #00e699;
+            --text-white: #ffffff;
+            --text-gray: #94a3b8;
+            --card-dark: #0d1511;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-white);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: 
+                linear-gradient(135deg, rgba(0, 255, 170, 0.03) 0%, transparent 100%),
+                radial-gradient(circle at 80% 20%, rgba(0, 255, 170, 0.07) 0%, transparent 50%);
+            z-index: -2;
+        }
+
+        .bg-chart-line {
+            position: absolute;
+            bottom: 10%; left: 0; width: 100%; height: 300px;
+            opacity: 0.15; pointer-events: none; z-index: -1;
+        }
+
+        /* --- MINI ROBOT UTUH --- */
+        .robot-container {
+            position: fixed;
+            top: 15px; left: 15px;
+            display: flex; flex-direction: column; align-items: center;
+            z-index: 1000; animation: float 3s ease-in-out infinite;
+            transform: scale(0.85);
+        }
+
+        .bubble-chat {
+            background: #ffffff; color: #000000; padding: 5px 10px; border-radius: 8px;
+            font-size: 10px; font-weight: bold; margin-bottom: 6px; position: relative;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            animation: popIn 0.5s ease-out forwards, fadeOut 1s ease-in 4s forwards;
+        }
+
+        .bubble-chat::after {
+            content: ''; position: absolute; bottom: -5px; left: 50%;
+            transform: translateX(-50%); border-width: 5px 5px 0;
+            border-style: solid; border-color: #ffffff transparent;
+        }
+
+        .mini-robot-head {
+            width: 45px; height: 42px; background: #ffffff; border-radius: 15px; position: relative; border: 2px solid #cbd5e1;
+        }
+
+        .mini-robot-face {
+            position: absolute; top: 6px; left: 5px; width: 31px; height: 26px; background: #0f172a; border-radius: 9px; display: flex; justify-content: space-around; align-items: center; padding: 0 4px;
+        }
+
+        .mini-robot-eye {
+            width: 7px; height: 7px; background: var(--primary-glow); border-radius: 50%; box-shadow: 0 0 6px var(--primary-glow); animation: blink 4s infinite;
+        }
+
+        .mini-robot-body {
+            width: 32px; height: 30px; background: #ffffff; border: 2px solid #cbd5e1; border-radius: 8px 8px 12px 12px; margin-top: -3px;
+        }
+
+        .mini-robot-legs { display: flex; justify-content: space-between; width: 22px; margin-top: -2px; }
+        .mini-robot-leg { width: 7px; height: 8px; background: #cbd5e1; border-radius: 0 0 3px 3px; }
+
+        /* --- NAVBAR --- */
+        header { display: flex; justify-content: space-between; align-items: center; padding: 20px 5%; width: 100%; }
+        .logo { font-size: 22px; font-weight: 800; margin-left: 45px; }
+        .logo span { color: var(--primary-glow); }
+        nav { display: flex; gap: 15px; }
+        nav a { color: var(--text-gray); text-decoration: none; font-size: 13px; font-weight: 500; }
+        nav a.active { color: var(--primary-glow); }
+
+        /* --- HERO CONTAINER --- */
+        .hero-container {
+            display: grid; grid-template-columns: 1fr 1.2fr; align-items: center; max-width: 1200px; margin: 30px auto; padding: 0 5%; gap: 40px;
+        }
+
+        .hero-left-art { display: flex; justify-content: center; align-items: center; }
+
+        .big-robot-art {
+            width: 240px; height: 250px; background: #ffffff; border-radius: 70px; position: relative; border: 5px solid #cbd5e1; box-shadow: 0 25px 50px -12px rgba(0, 255, 170, 0.2);
+        }
+
+        .big-robot-screen { position: absolute; top: 35px; left: 25px; width: 180px; height: 130px; background: #0f172a; border-radius: 35px; display: flex; justify-content: space-around; align-items: center; padding: 0 25px; }
+        .big-robot-eye { width: 40px; height: 40px; background: var(--primary-glow); border-radius: 50%; box-shadow: 0 0 20px var(--primary-glow); }
+        .big-robot-smile { position: absolute; bottom: 35px; left: 50%; transform: translateX(-50%); width: 50px; height: 18px; border-bottom: 5px solid #0f172a; border-radius: 50%; }
+
+        .hero-right-content { width: 100%; }
+        .tag-badge { background: rgba(0, 255, 170, 0.08); color: var(--primary-glow); padding: 6px 14px; border-radius: 30px; font-size: 11px; font-weight: 600; display: inline-flex; margin-bottom: 15px; border: 1px solid rgba(0, 255, 170, 0.15); }
+        .hero-right-content h1 { font-size: 38px; font-weight: 700; line-height: 1.2; margin-bottom: 15px; }
+        .hero-right-content p { color: var(--text-gray); font-size: 14px; line-height: 1.6; margin-bottom: 25px; }
+
+        .interactive-zone { background: var(--card-dark); border: 1px solid rgba(255,255,255,0.04); border-radius: 20px; padding: 20px; box-shadow: 0 30px 60px rgba(0,0,0,0.4); }
+
+        .upload-area { border: 2px dashed rgba(0, 255, 170, 0.2); border-radius: 12px; padding: 25px 15px; text-align: center; cursor: pointer; background: rgba(0, 0, 0, 0.3); margin-bottom: 15px; }
+        #preview { max-width: 100%; max-height: 180px; border-radius: 8px; display: none; margin: 0 auto; }
+
+        .btn-action { background: var(--primary-glow); color: #030712; border: none; padding: 12px 25px; font-size: 14px; font-weight: 700; border-radius: 30px; cursor: pointer; width: 100%; justify-content: center; display: inline-flex; }
+        .btn-action:disabled { background: #334155; color: #64748b; cursor: not-allowed; }
+
+        .result-box { margin-top: 20px; background: #0a1410; border-left: 4px solid var(--primary-glow); padding: 15px; border-radius: 4px 12px 12px 4px; display: none; text-align: left; line-height: 1.6; font-size: 13.5px; }
+
+        @media (max-width: 768px) {
+            .hero-container { grid-template-columns: 1fr; text-align: center; gap: 25px; }
+            .hero-right-content h1 { font-size: 28px; }
+            .big-robot-art { width: 180px; height: 190px; border-radius: 50px; }
+            .big-robot-screen { width: 130px; height: 95px; }
+            .big-robot-eye { width: 28px; height: 28px; }
+        }
+        @keyframes float { 0%, 100% { transform: translateY(0) scale(0.85); } 50% { transform: translateY(-6px) scale(0.85); } }
+        @keyframes blink { 0%, 90%, 100% { transform: scaleY(1); } 95% { transform: scaleY(0.1); } }
+    </style>
+</head>
+<body>
+
+    <svg class="bg-chart-line" viewBox="0 0 1440 320" preserveAspectRatio="none">
+        <path fill="none" stroke="#00ffaa" stroke-width="2" d="M0,224L60,208C120,192,240,160,360,165.3C480,171,600,213,720,208C840,203,960,149,1080,138.7C1200,128,1320,160,1380,176L1440,192"></path>
+    </svg>
+
+    <div class="robot-container">
+        <div class="bubble-chat" id="robotBubble">Halo! Yuk upload chartmu..</div>
+        <div class="mini-robot-head">
+            <div class="mini-robot-face"><div class="mini-robot-eye"></div><div class="mini-robot-eye"></div></div>
+        </div>
+        <div class="mini-robot-body"></div>
+        <div class="mini-robot-legs"><div class="mini-robot-leg"></div><div class="mini-robot-leg"></div></div>
+    </div>
+
+    <header>
+        <div class="logo">Dika <span>Ai</span></div>
+        <nav><a href="#" class="active">Bots</a><a href="#">Markets</a><a href="#">Trade</a></nav>
+    </header>
+
+    <main class="hero-container">
+        <div class="hero-left-art">
+            <div class="big-robot-art">
+                <div class="big-robot-screen"><div class="big-robot-eye"></div><div class="big-robot-eye"></div></div>
+                <div class="big-robot-smile"></div>
+            </div>
+        </div>
+
+        <div class="hero-right-content">
+            <div class="tag-badge">✓ Gemini API Key Mode</div>
+            <h1>The Fastest and Secure<br><span style="color: var(--primary-glow);">AI Trading Assistant.</span></h1>
+            <p>Unggah tangkapan layar grafik pasar Anda untuk mendapatkan pemetaan teknikal instan langsung dari sistem Google Gemini.</p>
+
+            <div class="interactive-zone">
+                <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+                    <input type="file" id="fileInput" accept="image/*" style="display:none;" onchange="previewImage(event)">
+                    <div id="uploadText">
+                        <p style="font-size: 22px; margin-bottom: 5px;">📊</p>
+                        <p style="font-size: 12px; font-weight: 600;">Klik untuk upload screenshot chart</p>
+                    </div>
+                    <img id="preview" alt="Preview">
+                </div>
+
+                <button class="btn-action" id="btnAnalyze" onclick="mulaiAnalisa()" disabled>Mulai Analisa →</button>
+                <div class="result-box" id="resultBox"></div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Mengunci API Key ke dalam penyimpanan browser internal HP
+        let GEMINI_API_KEY = localStorage.getItem("DIKA_GEMINI_KEY") || ""; 
+        let base64Image = "";
+        let imageMimeType = "image/jpeg";
+
+        setTimeout(() => {
+            const bubble = document.getElementById('robotBubble');
+            if(bubble) bubble.style.display = 'none';
+        }, 5000);
+
+        function previewImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                imageMimeType = file.type; 
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('preview').src = e.target.result;
+                    document.getElementById('preview').style.display = 'block';
+                    document.getElementById('uploadText').style.display = 'none';
+                    document.getElementById('btnAnalyze').disabled = false;
+                    base64Image = e.target.result.split(',')[1];
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        async function mulaiAnalisa() {
+            const btn = document.getElementById('btnAnalyze');
+            const resultBox = document.getElementById('resultBox');
+            
+            // Jika memori local kosong, otomatis memunculkan kotak input pop-up di layar HP
+            if (!GEMINI_API_KEY || GEMINI_API_KEY.trim() === "") {
+                const inputKey = prompt("API Key Gemini belum diset.\n\nSilakan Tempel (Paste) API Key Gemini Anda (AIzaSy...) di sini:");
+                if (inputKey && inputKey.trim() !== "") {
+                    GEMINI_API_KEY = inputKey.trim();
+                    localStorage.setItem("DIKA_GEMINI_KEY", GEMINI_API_KEY);
+                } else {
+                    resultBox.style.display = "block";
+                    resultBox.innerHTML = "<strong style='color:#ff5555;'>Error:</strong> API Key wajib diisi untuk mendeteksi gambar.";
+                    return;
+                }
+            }
+
+            if (!base64Image) return;
+
+            btn.disabled = true;
+            btn.innerText = "Menganalisa Chart...";
+            resultBox.style.display = "block";
+            resultBox.innerHTML = "Menghubungkan ke Google AI Studio...<br>Membaca pola candlestick...";
+
+            const promptNarasi = "Analisa chart trading ini secara profesional sebagai ahli teknikal. Berikan respon dengan format poin-poin yang jelas dalam Bahasa Indonesia: 1. Saran Entry (Buy/Sell/Wait) & Area Harga saat ini, 2. Rekomendasi Target Take Profit (TP) & Stop Loss (SL), 3. Alasan entry berdasarkan struktur pasar, candlestick pattern, support/resistance, atau indikator yang terlihat pada gambar.";
+
+            // Endpoint resmi Gemini 1.5 Flash yang mendukung multi-modal gambar
+            const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+
+            const payload = {
+                contents: [{
+                    parts: [
+                        { text: promptNarasi },
+                        {
+                            inlineData: {
+                                mimeType: imageMimeType,
+                                data: base64Image
+                            }
+                        }
+                    ]
+                }]
+            };
+
+            try {
+                const response = await fetch(endpoint, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await response.json();
+                
+                if (data.error) {
+                    resultBox.innerHTML = `<strong style='color:#ff5555;'>Gemini Error:</strong> ${data.error.message}<br><br><button onclick='resetKey()' style='padding:5px 10px; background:#ff5555; border:none; color:white; border-radius:4px; font-size:11px; cursor:pointer;'>Reset / Ganti API Key</button>`;
+                    return;
+                }
+
+                if (data.candidates && data.candidates[0].content.parts[0].text) {
+                    let textHasil = data.candidates[0].content.parts[0].text;
+                    resultBox.innerHTML = textHasil
+                        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                        .replace(/\n/g, '<br>');
+                } else {
+                    resultBox.innerText = "Gagal memproses gambar dari server Gemini. Pastikan koneksi internet stabil.";
+                }
+
+            } catch (error) {
+                console.error(error);
+                resultBox.innerHTML = `<strong style='color:#ff5555;'>Error Koneksi:</strong> Gagal terhubung ke server Google AI Studio.`;
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "Mulai Analisa →";
+            }
+        }
+
+        function resetKey() {
+            localStorage.removeItem("DIKA_GEMINI_KEY");
+            GEMINI_API_KEY = "";
+            alert("API Key lama dihapus. Silakan klik ulang tombol analisa untuk memasukkan Key baru.");
+            location.reload();
+        }
+    </script>
+</body>
+</html>
