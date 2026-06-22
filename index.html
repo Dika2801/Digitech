@@ -164,9 +164,9 @@
         </div>
 
         <div class="hero-right-content">
-            <div class="tag-badge">✓ Gemini API Key Mode</div>
+            <div class="tag-badge">✓ Dika AI Mode</div>
             <h1>The Fastest and Secure<br><span style="color: var(--primary-glow);">AI Trading Assistant.</span></h1>
-            <p>Unggah tangkapan layar grafik pasar Anda untuk mendapatkan pemetaan teknikal instan langsung dari sistem Google Gemini.</p>
+            <p>Unggah tangkapan layar grafik pasar Anda untuk mendapatkan pemetaan teknikal instan langsung dari sistem AI kami.</p>
 
             <div class="interactive-zone">
                 <div class="upload-area" onclick="document.getElementById('fileInput').click()">
@@ -233,9 +233,9 @@
             btn.disabled = true;
             btn.innerText = "Menganalisa Chart...";
             resultBox.style.display = "block";
-            resultBox.innerHTML = "Menghubungkan ke Google AI Studio...<br>Membaca pola candlestick...";
+            resultBox.innerHTML = "Menghubungkan ke SERVER DIKA AI...<br>Membaca pola candlestick...";
 
-            const promptNarasi = "Analisa chart trading ini secara profesional sebagai ahli teknikal. Berikan respon dengan format poin-poin yang jelas dalam Bahasa Indonesia: 1. Saran Entry (Buy/Sell/Wait) & Area Harga saat ini, 2. Rekomendasi Target Take Profit (TP) & Stop Loss (SL), 3. Alasan entry berdasarkan struktur pasar, candlestick pattern, support/resistance, atau indikator yang terlihat pada gambar.";
+            const promptNarasi = "Analisa chart trading ini secara profesional sebagai ahli teknikal Scalping ataupun day trading. Berikan respon dengan format poin-poin yang jelas dalam Bahasa Indonesia: 1. Saran Entry (Buy/Sell/Wait) & Area Harga entry, 2. Rekomendasi Target Take Profit (TP) & Stop Loss (SL), 3. Alasan entry berdasarkan struktur pasar, candlestick pattern, support/resistance, atau indikator yang terlihat pada gambar.";
 
             // Endpoint resmi Gemini 1.5 Flash yang mendukung multi-modal gambar
             const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
