@@ -2,13 +2,14 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Dika Ai Analisa Trading</title>
     <style>
         :root {
-            --bg-color: #060b08;
+            --bg-color: #040806;
             --primary-glow: #00ffaa;
             --robot-green: #00e699;
+            --candle-red: #ff4d4d;
             --text-white: #ffffff;
             --text-gray: #94a3b8;
             --card-dark: #0d1511;
@@ -25,41 +26,34 @@
             background-color: var(--bg-color);
             color: var(--text-white);
             min-height: 100vh;
+            width: 100%;
             overflow-x: hidden;
             position: relative;
         }
 
-        body::before {
-            content: "";
+        /* --- BACKGROUND SENI ROBOT + CANDLESTICK GLOBAL --- */
+        .bg-art-container {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: 
-                linear-gradient(135deg, rgba(0, 255, 170, 0.03) 0%, transparent 100%),
-                radial-gradient(circle at 80% 20%, rgba(0, 255, 170, 0.07) 0%, transparent 50%);
-            z-index: -2;
+            pointer-events: none; z-index: -1; opacity: 0.12;
         }
 
-        .bg-chart-line {
-            position: absolute;
-            bottom: 10%; left: 0; width: 100%; height: 300px;
-            opacity: 0.15; pointer-events: none; z-index: -1;
-        }
-
-        /* --- MINI ROBOT UTUH --- */
+        /* --- MINI ROBOT UTUH (Pojok Kiri Atas) --- */
         .robot-container {
             position: fixed;
             top: 15px; left: 15px;
             display: flex; flex-direction: column; align-items: center;
             z-index: 1000; animation: float 3s ease-in-out infinite;
-            transform: scale(0.85);
+            transform: scale(0.8);
         }
 
-        /* POPUP SAPAAN ROBOT (TIDAK AKAN HILANG) */
+        /* POPUP SAPAAN (HILANG OTOMATIS) */
         .bubble-chat {
             background: #ffffff; color: #000000; padding: 5px 12px; border-radius: 8px;
             font-size: 10px; font-weight: bold; margin-bottom: 6px; position: relative;
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
             white-space: nowrap;
+            animation: fadeOutBubble 0.6s ease forwards 4s;
         }
 
         .bubble-chat::after {
@@ -85,27 +79,22 @@
         }
 
         .mini-robot-hand-left {
-            position: absolute; left: -7px; top: 2px; width: 6px; height: 16px; background: #ffffff; border: 1.5px solid var(--robot-green); border-radius: 3px; transform-origin: top center; transition: 0.5s;
+            position: absolute; left: -7px; top: 2px; width: 6px; height: 16px; background: #ffffff; border: 1.5px solid var(--robot-green); border-radius: 3px; transform-origin: top center; transition: 0.4s;
         }
 
         .mini-robot-hand-right {
-            position: absolute; right: -7px; top: 2px; width: 6px; height: 16px; background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 3px; transform-origin: top center; transition: 0.5s;
+            position: absolute; right: -7px; top: 2px; width: 6px; height: 16px; background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 3px; transform-origin: top center; transition: 0.4s;
         }
 
-        /* ANIMASI BUKA LAPTOP */
-        .robot-container.analyzing .mini-robot-hand-left { transform: rotate(-40deg); top: 8px; left: -2px; }
-        .robot-container.analyzing .mini-robot-hand-right { transform: rotate(40deg); top: 8px; right: -2px; }
+        /* BARU: ANIMASI PROYEKSI HOLOGRAM (TANGAN MENENGADAH) */
+        .robot-container.analyzing .mini-robot-hand-left { transform: rotate(-90deg); left: -4px; }
+        .robot-container.analyzing .mini-robot-hand-right { transform: rotate(90deg); right: -4px; }
 
-        /* LAPTOP MINI HOLOGRAM */
-        .mini-laptop {
-            width: 38px; height: 6px; background: #0f172a; border: 1px solid var(--primary-glow); border-radius: 2px; margin-top: 2px; opacity: 0; transform: scaleX(0); transition: 0.4s ease; position: relative;
+        /* SINAR PROYEKSI HOLOGRAM DARI MATA MENCORONG KE BAWAH */
+        .hologram-ray {
+            width: 40px; height: 0px; background: linear-gradient(to bottom, rgba(0, 255, 170, 0.4), transparent); clip-path: polygon(30% 0%, 70% 0%, 100% 100%, 0% 100%); opacity: 0; transition: 0.4s ease; margin-top: 1px;
         }
-        .mini-laptop::before {
-            content: ''; position: absolute; bottom: 5px; left: 6px; width: 24px; height: 18px; background: rgba(0, 255, 170, 0.2); border: 1px solid var(--primary-glow); border-radius: 2px; transform: rotateX(20deg); opacity: 0; transition: 0.4s ease;
-        }
-
-        .robot-container.analyzing .mini-laptop { opacity: 1; transform: scaleX(1); }
-        .robot-container.analyzing .mini-laptop::before { opacity: 1; animation: screenGlow 0.5s ease infinite alternate; }
+        .robot-container.analyzing .hologram-ray { height: 25px; opacity: 1; animation: laserPulse 0.3s ease infinite alternate; }
 
         .mini-robot-legs { display: flex; justify-content: space-between; width: 22px; margin-top: -2px; }
         .mini-robot-leg { width: 7px; height: 8px; background: #cbd5e1; border-radius: 0 0 3px 3px; }
@@ -117,65 +106,90 @@
 
         /* --- HERO CONTAINER --- */
         .hero-container {
-            display: grid; grid-template-columns: 1fr 1.2fr; align-items: center; max-width: 1200px; margin: 30px auto; padding: 0 5%; gap: 40px;
+            display: grid; grid-template-columns: 1fr 1.2fr; align-items: center; max-width: 1200px; margin: 20px auto; padding: 0 5%; gap: 40px; width: 100%;
         }
 
-        .hero-left-art { display: flex; justify-content: center; align-items: center; }
-        .big-robot-art { width: 240px; height: 250px; background: #ffffff; border-radius: 70px; position: relative; border: 5px solid #cbd5e1; box-shadow: 0 25px 50px -12px rgba(0, 255, 170, 0.2); }
-        .big-robot-screen { position: absolute; top: 35px; left: 25px; width: 180px; height: 130px; background: #0f172a; border-radius: 35px; display: flex; justify-content: space-around; align-items: center; padding: 0 25px; }
-        .big-robot-eye { width: 40px; height: 40px; background: var(--primary-glow); border-radius: 50%; box-shadow: 0 0 20px var(--primary-glow); }
+        .hero-left-art { display: flex; justify-content: center; align-items: center; width: 100%; }
+        
+        /* BARU: KEPALA ROBOT DIPERKECIL (UKURAN DI-TWEAK LEBIH MINIMALIS) */
+        .big-robot-art { width: 170px; height: 180px; background: #ffffff; border-radius: 50px; position: relative; border: 4px solid #cbd5e1; box-shadow: 0 20px 40px -10px rgba(0, 255, 170, 0.2); }
+        .big-robot-screen { position: absolute; top: 25px; left: 18px; width: 130px; height: 95px; background: #0f172a; border-radius: 25px; display: flex; justify-content: space-around; align-items: center; padding: 0 18px; }
+        .big-robot-eye { width: 28px; height: 28px; background: var(--primary-glow); border-radius: 50%; box-shadow: 0 0 15px var(--primary-glow); }
+        .big-robot-smile { position: absolute; bottom: 25px; left: 50%; transform: translateX(-50%); width: 35px; height: 12px; border-bottom: 4px solid #0f172a; border-radius: 50%; }
 
-        .hero-right-content { width: 100%; }
+        .hero-right-content { width: 100%; overflow: hidden; }
         .tag-badge { background: rgba(0, 255, 170, 0.08); color: var(--primary-glow); padding: 6px 14px; border-radius: 30px; font-size: 11px; font-weight: 600; display: inline-flex; margin-bottom: 15px; }
         .hero-right-content h1 { font-size: 34px; font-weight: 700; margin-bottom: 15px; }
 
-        .interactive-zone { background: var(--card-dark); border: 1px solid rgba(255,255,255,0.04); border-radius: 20px; padding: 20px; }
+        .interactive-zone { background: var(--card-dark); border: 1px solid rgba(255,255,255,0.04); border-radius: 20px; padding: 20px; width: 100%; }
 
-        /* --- ANIMASI TULISAN BERGERAK KE KIRI --- */
+        /* --- RUNNING TEXT --- */
         .running-text-container {
             width: 100%; overflow: hidden; background: rgba(255, 55, 55, 0.1); border: 1px solid rgba(255, 55, 55, 0.2); padding: 8px; border-radius: 8px; margin-bottom: 15px;
         }
         .running-text {
-            display: inline-block; white-space: nowrap; color: #ff5555; font-size: 11.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; padding-left: 100%; animation: marquee 15s linear infinite;
+            display: inline-block; white-space: nowrap; color: #ff5555; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; padding-left: 100%; animation: marquee 15s linear infinite;
         }
 
-        .upload-area { border: 2px dashed rgba(0, 255, 170, 0.2); border-radius: 12px; padding: 25px 15px; text-align: center; cursor: pointer; background: rgba(0, 0, 0, 0.3); margin-bottom: 15px; }
+        .upload-area { border: 2px dashed rgba(0, 255, 170, 0.2); border-radius: 12px; padding: 25px 15px; text-align: center; cursor: pointer; background: rgba(0, 0, 0, 0.3); margin-bottom: 15px; width: 100%; }
         #preview { max-width: 100%; max-height: 180px; border-radius: 8px; display: none; margin: 0 auto; }
 
         .btn-action { background: var(--primary-glow); color: #030712; border: none; padding: 12px 25px; font-size: 14px; font-weight: 700; border-radius: 30px; cursor: pointer; width: 100%; justify-content: center; display: inline-flex; }
         .btn-action:disabled { background: #334155; color: #64748b; cursor: not-allowed; }
 
-        /* --- TAB SYSTEM UNTUK HASIL EFISIEN --- */
-        .result-wrapper { margin-top: 20px; display: none; background: #0a1410; border: 1px solid rgba(0, 255, 170, 0.15); border-radius: 12px; overflow: hidden; }
-        .tab-header { display: flex; background: #060b08; border-bottom: 1px solid rgba(0, 255, 170, 0.1); }
-        .tab-btn { flex: 1; padding: 12px; background: none; border: none; color: var(--text-gray); font-size: 12px; font-weight: 600; cursor: pointer; transition: 0.3s; text-align: center; }
+        /* --- TAB SYSTEM RESULT --- */
+        .result-wrapper { margin-top: 20px; display: none; background: #0a1410; border: 1px solid rgba(0, 255, 170, 0.15); border-radius: 12px; overflow: hidden; width: 100%; }
+        .tab-header { display: flex; background: #060b08; border-bottom: 1px solid rgba(0, 255, 170, 0.1); width: 100%; }
+        .tab-btn { flex: 1; padding: 12px 5px; background: none; border: none; color: var(--text-gray); font-size: 11px; font-weight: 600; cursor: pointer; transition: 0.3s; text-align: center; }
         .tab-btn.active { color: var(--primary-glow); background: #0a1410; border-bottom: 2px solid var(--primary-glow); }
-        .tab-content { padding: 15px; font-size: 13.5px; line-height: 1.6; min-height: 120px; text-align: left; }
+        .tab-content { padding: 15px; font-size: 13px; line-height: 1.6; min-height: 120px; text-align: left; width: 100%; word-break: break-word; }
         
         .result-footer { padding: 10px 15px; background: #060b08; display: flex; justify-content: flex-end; border-top: 1px solid rgba(0, 255, 170, 0.05); }
         .btn-copy { background: rgba(0, 255, 170, 0.1); color: var(--primary-glow); border: 1px solid rgba(0, 255, 170, 0.3); padding: 6px 14px; font-size: 11px; font-weight: 600; border-radius: 6px; cursor: pointer; }
 
-        .status-box { padding: 15px; color: var(--text-gray); font-size: 13px; text-align: center; display: none; }
+        .status-box { padding: 15px; color: var(--text-gray); font-size: 13px; text-align: center; display: none; width: 100%; }
 
+        /* --- RESPONSIVE BREAKPOINT MOBILE --- */
         @media (max-width: 768px) {
-            .hero-container { grid-template-columns: 1fr; text-align: center; gap: 25px; }
-            .hero-right-content h1 { font-size: 26px; }
-            .big-robot-art { width: 180px; height: 190px; border-radius: 50px; }
-            .big-robot-screen { width: 130px; height: 95px; }
-            .big-robot-eye { width: 28px; height: 28px; }
+            header { padding: 15px 4%; }
+            .logo { margin-left: 35px; font-size: 20px; }
+            .hero-container { grid-template-columns: 1fr; text-align: center; gap: 20px; margin: 10px auto; padding: 0 4%; }
+            .hero-right-content h1 { font-size: 24px; }
+            .big-robot-art { width: 140px; height: 150px; border-radius: 40px; }
+            .big-robot-screen { width: 105px; height: 80px; top: 18px; left: 18px; border-radius: 18px; }
+            .big-robot-eye { width: 22px; height: 22px; }
+            .interactive-zone { padding: 15px; }
         }
+
+        @keyframes fadeOutBubble { to { opacity: 0; visibility: hidden; } }
         @keyframes marquee { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
-        @keyframes float { 0%, 100% { transform: translateY(0) scale(0.85); } 50% { transform: translateY(-6px) scale(0.85); } }
+        @keyframes float { 0%, 100% { transform: translateY(0) scale(0.8); } 50% { transform: translateY(-6px) scale(0.8); } }
         @keyframes blink { 0%, 90%, 100% { transform: scaleY(1); } 95% { transform: scaleY(0.1); } }
-        @keyframes screenGlow { from { background: rgba(0, 255, 170, 0.15); } to { background: rgba(0, 255, 170, 0.35); } }
+        @keyframes laserPulse { from { opacity: 0.7; filter: drop-shadow(0 0 2px var(--primary-glow)); } to { opacity: 1; filter: drop-shadow(0 0 8px var(--primary-glow)); } }
     </style>
 </head>
 <body>
 
-    <svg class="bg-chart-line" viewBox="0 0 1440 320" preserveAspectRatio="none">
-        <path fill="none" stroke="#00ffaa" stroke-width="2" d="M0,224L60,208C120,192,240,160,360,165.3C480,171,600,213,720,208C840,203,960,149,1080,138.7C1200,128,1320,160,1380,176L1440,192"></path>
-    </svg>
+    <!-- BACKGROUND SENI ROBOT + CANDLESTICK (SVG INFRASTRUKTUR) -->
+    <div class="bg-art-container">
+        <svg width="100%" height="100%" viewBox="0 0 1440 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Candlestick Hijau (Bullish) -->
+            <rect x="200" y="300" width="30" height="180" rx="4" fill="#00ffaa"/>
+            <line x1="215" y1="220" x2="215" y2="520" stroke="#00ffaa" stroke-width="4" stroke-linecap="round"/>
+            
+            <!-- Candlestick Merah (Bearish) -->
+            <rect x="1150" y="250" width="30" height="220" rx="4" fill="#ff4d4d"/>
+            <line x1="1165" y1="150" x2="1165" y2="560" stroke="#ff4d4d" stroke-width="4" stroke-linecap="round"/>
+            
+            <!-- Siluet Robot Transparan Besar di Tengah Atas -->
+            <rect x="570" y="80" width="300" height="240" rx="80" stroke="#00ffaa" stroke-width="3"/>
+            <rect x="620" y="130" width="200" height="120" rx="30" fill="#0f172a" stroke="#00ffaa" stroke-width="2"/>
+            <circle cx="670" cy="190" r="20" fill="#00ffaa"/>
+            <circle cx="770" cy="190" r="20" fill="#00ffaa"/>
+        </svg>
+    </div>
 
+    <!-- MINI ROBOT POJOK KIRI ATAS -->
     <div class="robot-container" id="miniRobot">
         <div class="bubble-chat">Halo! Yuk upload chartmu..</div>
         <div class="mini-robot-head">
@@ -185,7 +199,8 @@
             <div class="mini-robot-hand-left"></div>
             <div class="mini-robot-hand-right"></div>
         </div>
-        <div class="mini-laptop"></div>
+        <!-- CORONG LASER HOLOGRAM PROYEKSI -->
+        <div class="hologram-ray"></div>
         <div class="mini-robot-legs"><div class="mini-robot-leg"></div><div class="mini-robot-leg"></div></div>
     </div>
 
@@ -193,11 +208,14 @@
 
     <main class="hero-container">
         <div class="hero-left-art">
-            <div class="big-robot-art"><div class="big-robot-screen"><div class="big-robot-eye"></div><div class="big-robot-eye"></div></div></div>
+            <div class="big-robot-art">
+                <div class="big-robot-screen"><div class="big-robot-eye"></div><div class="big-robot-eye"></div></div>
+                <div class="big-robot-smile"></div>
+            </div>
         </div>
 
         <div class="hero-right-content">
-            <div class="tag-badge">✓ Dika AI Smart Tab System Active</div>
+            <div class="tag-badge">✓ Gemini Smart Tab System Active</div>
             <h1>The Fastest and Secure<br><span style="color: var(--primary-glow);">AI Trading Assistant.</span></h1>
 
             <div class="interactive-zone">
@@ -220,7 +238,7 @@
 
                 <div class="result-wrapper" id="resultWrapper">
                     <div class="tab-header">
-                        <button class="tab-btn active" onclick="switchTab('trend')">📊 Trend & Market</button>
+                        <button class="tab-btn active" onclick="switchTab('trend')">📊 Trend</button>
                         <button class="tab-btn" onclick="switchTab('entry')">🎯 Entry Area</button>
                         <button class="tab-btn" onclick="switchTab('tpsl')">🛡️ TP & SL</button>
                     </div>
@@ -273,8 +291,9 @@
             btn.disabled = true;
             resultWrapper.style.display = "none";
             statusBox.style.display = "block";
-            statusBox.innerHTML = "Robot membuka laptop...<br>Mengalkulasi struktur candlestick via Gemini API...";
+            statusBox.innerHTML = "Robot memproyeksikan hologram...<br>Mengalkulasi struktur candlestick via Gemini API...";
             
+            // NYALAKAN EFEK PROYEKSI LASER DIGITAL
             robot.classList.add('analyzing');
 
             const promptNarasi = "Analisa chart trading ini. Kamu wajib memberikan respon dengan memisahkannya ke dalam 3 bagian menggunakan format tag persis seperti ini:\n[TREND] tulis analisa tren, struktur pasar, dan indikator di sini [/TREND]\n[ENTRY] tulis rekomendasi posisi buy/sell/wait dan angka harga masuk di sini [/ENTRY]\n[TPSL] tulis target angka batas take profit dan stop loss di sini [/TPSL]";
@@ -308,6 +327,7 @@
                 statusBox.innerHTML = "<span style='color:#ff5555;'>Gagal menyambung ke server Google Studio.</span>";
             } finally {
                 btn.disabled = false;
+                // MATIKAN EFEK LASER
                 robot.classList.remove('analyzing');
             }
         }
@@ -327,10 +347,10 @@
         }
 
         function copyResult() {
-            const gabunganTeks = `== STRATEGI DIKA AI ==\n\n[1. Trend & Market]\n${dataAnalisa.trend.replace(/<br>/g, '\n').replace(/<\/?[^>]+(>|$)/g, "")}\n\n[2. Entry Area]\n${dataAnalisa.entry.replace(/<br>/g, '\n').replace(/<\/?[^>]+(>|$)/g, "")}\n\n[3. Target TP & SL]\n${dataAnalisa.tpsl.replace(/<br>/g, '\n').replace(/<\/?[^>]+(>|$)/g, "")}`;
+            const gabunganTeks = `== STRATEGI DIKA AI ==\n\n[1. Trend]\n${dataAnalisa.trend.replace(/<br>/g, '\n').replace(/<\/?[^>]+(>|$)/g, "")}\n\n[2. Entry Area]\n${dataAnalisa.entry.replace(/<br>/g, '\n').replace(/<\/?[^>]+(>|$)/g, "")}\n\n[3. Target TP & SL]\n${dataAnalisa.tpsl.replace(/<br>/g, '\n').replace(/<\/?[^>]+(>|$)/g, "")}`;
             navigator.clipboard.writeText(gabunganTeks);
             alert("Strategi trading berhasil disalin!");
         }
     </script>
 </body>
-    </html>
+</html>
