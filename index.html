@@ -34,7 +34,7 @@
             flex-direction: column;
         }
 
-        /* --- BACKGROUND SENI ROBOT + CANDLESTICK LEBIH JELAS --- */
+        /* --- BACKGROUND SENI ROBOT + CANDLESTICK KONTRAST TINGGI --- */
         .bg-art-container {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -44,7 +44,7 @@
         /* --- MINI ROBOT UTUH (Pojok Kiri Atas) --- */
         .robot-container {
             position: fixed;
-            top: 15px; left: 15px;
+            top: 45px; left: 15px; /* Diturunkan sedikit agar proyeksi laser ke atas tidak terpotong layar */
             display: flex; flex-direction: column; align-items: center;
             z-index: 1000; animation: float 3s ease-in-out infinite;
             transform: scale(0.8);
@@ -64,6 +64,20 @@
             border-style: solid; border-color: #ffffff transparent;
         }
 
+        /* BARU: KOTAK LASER HOLOGRAM NEMBAK KE ATAS */
+        .hologram-ray-up {
+            width: 80px; height: 0px; 
+            background: linear-gradient(to top, rgba(0, 255, 170, 0.7), rgba(0, 255, 170, 0.05)); 
+            clip-path: polygon(0% 0%, 100% 0%, 65% 100%, 35% 100%); 
+            opacity: 0; transition: 0.4s ease;
+            margin-bottom: 2px;
+        }
+        .robot-container.analyzing .hologram-ray-up { 
+            height: 45px; 
+            opacity: 1; 
+            animation: laserPulse 0.25s ease infinite alternate; 
+        }
+
         .mini-robot-head {
             width: 45px; height: 42px; background: #ffffff; border-radius: 15px; position: relative; border: 2px solid #cbd5e1;
         }
@@ -77,7 +91,7 @@
             transition: 0.3s ease;
         }
 
-        /* ANIMASI CAHAYA MATA KELUAR SAAT ANALISA */
+        /* ANIMASI KILATAN CAHAYA MATA */
         .robot-container.analyzing .mini-robot-eye {
             background: #ffffff;
             box-shadow: 0 0 15px #ffffff, 0 0 30px var(--primary-glow);
@@ -95,14 +109,9 @@
             position: absolute; right: -7px; top: 2px; width: 6px; height: 16px; background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 3px; transform-origin: top center; transition: 0.4s;
         }
 
-        .robot-container.analyzing .mini-robot-hand-left { transform: rotate(-90deg); left: -4px; }
-        .robot-container.analyzing .mini-robot-hand-right { transform: rotate(90deg); right: -4px; }
-
-        /* SINAR PROYEKSI HOLOGRAM */
-        .hologram-ray {
-            width: 50px; height: 0px; background: linear-gradient(to bottom, rgba(0, 255, 170, 0.6), transparent); clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%); opacity: 0; transition: 0.4s ease; margin-top: 1px;
-        }
-        .robot-container.analyzing .hologram-ray { height: 35px; opacity: 1; animation: laserPulse 0.3s ease infinite alternate; }
+        /* TANGAN MENENGADAH KE ATAS */
+        .robot-container.analyzing .mini-robot-hand-left { transform: rotate(-130deg); left: -3px; }
+        .robot-container.analyzing .mini-robot-hand-right { transform: rotate(130deg); right: -3px; }
 
         .mini-robot-legs { display: flex; justify-content: space-between; width: 22px; margin-top: -2px; }
         .mini-robot-leg { width: 7px; height: 8px; background: #cbd5e1; border-radius: 0 0 3px 3px; }
@@ -118,6 +127,8 @@
         }
 
         .hero-left-art { display: flex; justify-content: center; align-items: center; width: 100%; }
+        
+        /* ICON KEPALA ROBOT DIPERKECIL */
         .big-robot-art { width: 170px; height: 180px; background: #ffffff; border-radius: 50px; position: relative; border: 4px solid #cbd5e1; box-shadow: 0 20px 40px -10px rgba(0, 255, 170, 0.2); }
         .big-robot-screen { position: absolute; top: 25px; left: 18px; width: 130px; height: 95px; background: #0f172a; border-radius: 25px; display: flex; justify-content: space-around; align-items: center; padding: 0 18px; }
         .big-robot-eye { width: 28px; height: 28px; background: var(--primary-glow); border-radius: 50%; box-shadow: 0 0 15px var(--primary-glow); }
@@ -143,7 +154,7 @@
         .btn-action { background: var(--primary-glow); color: #030712; border: none; padding: 12px 25px; font-size: 14px; font-weight: 700; border-radius: 30px; cursor: pointer; width: 100%; justify-content: center; display: inline-flex; }
         .btn-action:disabled { background: #334155; color: #64748b; cursor: not-allowed; }
 
-        /* --- TAB SYSTEM --- */
+        /* --- TAB SYSTEM RESULT --- */
         .result-wrapper { margin-top: 20px; display: none; background: #0a1410; border: 1px solid rgba(0, 255, 170, 0.15); border-radius: 12px; overflow: hidden; width: 100%; }
         .tab-header { display: flex; background: #060b08; border-bottom: 1px solid rgba(0, 255, 170, 0.1); width: 100%; }
         .tab-btn { flex: 1; padding: 12px 5px; background: none; border: none; color: var(--text-gray); font-size: 11px; font-weight: 600; cursor: pointer; transition: 0.3s; text-align: center; }
@@ -192,12 +203,12 @@
         @keyframes marquee { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
         @keyframes float { 0%, 100% { transform: translateY(0) scale(0.8); } 50% { transform: translateY(-6px) scale(0.8); } }
         @keyframes blink { 0%, 90%, 100% { transform: scaleY(1); } 95% { transform: scaleY(0.1); } }
-        @keyframes laserPulse { from { opacity: 0.6; filter: drop-shadow(0 0 2px var(--primary-glow)); } to { opacity: 1; filter: drop-shadow(0 0 10px var(--primary-glow)); } }
+        @keyframes laserPulse { from { opacity: 0.6; filter: drop-shadow(0 0 2px var(--primary-glow)); } to { opacity: 1; filter: drop-shadow(0 0 12px var(--primary-glow)); } }
     </style>
 </head>
 <body>
 
-    <!-- BACKGROUND SENI ROBOT + CANDLESTICK PERTEGAS -->
+    <!-- BACKGROUND SENI ROBOT + CANDLESTICK LEBIH TEMBUS & JELAS -->
     <div class="bg-art-container">
         <svg width="100%" height="100%" viewBox="0 0 1440 900" fill="none" xmlns="http://www.w3.org/2000/svg">
             <!-- Candlestick Hijau (Bullish) -->
@@ -218,6 +229,8 @@
 
     <!-- MINI ROBOT POJOK KIRI ATAS -->
     <div class="robot-container" id="miniRobot">
+        <!-- KOTAK LASER NEMBAK KE ATAS -->
+        <div class="hologram-ray-up"></div>
         <div class="bubble-chat">Halo! Yuk upload chartmu..</div>
         <div class="mini-robot-head">
             <div class="mini-robot-face"><div class="mini-robot-eye"></div><div class="mini-robot-eye"></div></div>
@@ -226,7 +239,6 @@
             <div class="mini-robot-hand-left"></div>
             <div class="mini-robot-hand-right"></div>
         </div>
-        <div class="hologram-ray"></div>
         <div class="mini-robot-legs"><div class="mini-robot-leg"></div><div class="mini-robot-leg"></div></div>
     </div>
 
@@ -241,12 +253,12 @@
         </div>
 
         <div class="hero-right-content">
-            <div class="tag-badge">✓ Gemini 2.5 Flash Active</div>
+            <div class="tag-badge">✓ DIKA AI 0.1.1 Flash Active</div>
             <h1>The Fastest and Secure<br><span style="color: var(--primary-glow);">AI Trading Assistant.</span></h1>
 
             <div class="interactive-zone">
                 <div class="running-text-container">
-                    <div class="running-text">sebelum menggunakan ai ini pastikan anda sudah memiliki api key gemini</div>
+                    <div class="running-text">"sebelum menggunakan ai ini pastikan anda sudah memiliki api key gemini"</div>
                 </div>
 
                 <div class="upload-area" onclick="document.getElementById('fileInput').click()">
@@ -277,8 +289,8 @@
         </div>
     </main>
 
-    <!-- FLOATING WHATSAPP BUTTON -->
-    <a href="https://wa.me/6281234567890" class="btn-wa-floating" target="_blank" title="Hubungi Admin WhatsApp">
+    <!-- FLOATING WHATSAPP BUTTON (Ganti nomor dengan nomor WA lu) -->
+    <a href="https://wa.me/6285879324582" class="btn-wa-floating" target="_blank" title="Hubungi Admin WhatsApp">
         <svg viewBox="0 0 24 24">
             <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.717-1.456L0 24zm6.59-4.846c1.66.986 3.288 1.488 4.654 1.493 5.433-.001 9.85-4.414 9.853-9.84.002-2.63-1.023-5.101-2.885-6.963C16.406 1.983 13.93 1.01 12.012 1.01c-5.436 0-9.855 4.414-9.858 9.843-.001 1.542.413 3.01 1.2 4.258l-.988 3.612 3.681-.965zm12.369-6.423c-.274-.136-1.62-.8-1.871-.892-.252-.093-.435-.137-.617.137-.182.274-.707.892-.867 1.075-.16.182-.32.206-.593.07-1.124-.563-1.884-.974-2.639-2.268-.198-.34.198-.316.567-1.054.06-.118.03-.223-.015-.316-.045-.093-.435-1.05-.595-1.436-.157-.377-.33-.326-.452-.332-.117-.006-.251-.007-.386-.007-.135 0-.356.05-.542.254-.187.206-.713.697-.713 1.701 0 1.004.73 1.976.832 2.113.102.137 1.437 2.195 3.481 3.078.487.21 1.012.336 1.41.365.49.035.936-.188 1.288-.242.392-.06 1.62-.663 1.848-1.302.228-.64.228-1.188.16-1.302-.069-.115-.252-.207-.525-.344z"/>
         </svg>
@@ -286,8 +298,8 @@
 
     <!-- FOOTER COPYRIGHT -->
     <footer>
-        copyright 2026 oleh Andika<br>
-        seluruh lisensi berizin dan dilindungi undang-undang
+        -copyright @ 2026 oleh Andika-<br>
+        'seluruh lisensi berizin dan dilindungi undang-undang!'
     </footer>
 
     <script>
@@ -330,13 +342,13 @@
             btn.disabled = true;
             resultWrapper.style.display = "none";
             statusBox.style.display = "block";
-            statusBox.innerHTML = "Mata robot memancarkan laser...<br>Mengalkulasi struktur candlestick via Gemini 2.5 API...";
+            statusBox.innerHTML = "Mata robot memancarkan laser ke atas...<br>Memproyeksikan data struktur chart via Gemini 2.5 API...";
             
+            // AKTIFKAN ANIMASI LASER KE ATAS & KILATAN MATA
             robot.classList.add('analyzing');
 
             const promptNarasi = "Analisa chart trading ini. Kamu wajib memberikan respon dengan memisahkannya ke dalam 3 bagian menggunakan format tag persis seperti ini:\n[TREND] tulis analisa tren, struktur pasar, dan indikator di sini [/TREND]\n[ENTRY] tulis rekomendasi posisi buy/sell/wait dan angka harga masuk di sini [/ENTRY]\n[TPSL] tulis target angka batas take profit dan stop loss di sini [/TPSL]";
 
-            // UPGRADE SELESAI: MENGGUNAKAN ENPOINT VERSI GEMINI 2.5 FLASH RESMI
             const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
             const payload = { contents: [{ parts: [{ text: promptNarasi }, { inlineData: { mimeType: imageMimeType, data: base64Image } }] }] };
 
@@ -366,6 +378,7 @@
                 statusBox.innerHTML = "<span style='color:#ff5555;'>Gagal menyambung ke server Google Studio.</span>";
             } finally {
                 btn.disabled = false;
+                // MATIKAN EFEK LASER
                 robot.classList.remove('analyzing');
             }
         }
@@ -391,4 +404,4 @@
         }
     </script>
 </body>
-                                                                             </html>
+    </html>
