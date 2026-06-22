@@ -45,26 +45,13 @@
             opacity: 0.15; pointer-events: none; z-index: -1;
         }
 
-        /* --- MINI ROBOT UTUH --- */
+        /* --- MINI ROBOT UTUH DENGAN STRUKTUR LAPTOP --- */
         .robot-container {
             position: fixed;
             top: 15px; left: 15px;
             display: flex; flex-direction: column; align-items: center;
             z-index: 1000; animation: float 3s ease-in-out infinite;
             transform: scale(0.85);
-        }
-
-        .bubble-chat {
-            background: #ffffff; color: #000000; padding: 5px 10px; border-radius: 8px;
-            font-size: 10px; font-weight: bold; margin-bottom: 6px; position: relative;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            animation: popIn 0.5s ease-out forwards, fadeOut 1s ease-in 4s forwards;
-        }
-
-        .bubble-chat::after {
-            content: ''; position: absolute; bottom: -5px; left: 50%;
-            transform: translateX(-50%); border-width: 5px 5px 0;
-            border-style: solid; border-color: #ffffff transparent;
         }
 
         .mini-robot-head {
@@ -80,8 +67,31 @@
         }
 
         .mini-robot-body {
-            width: 32px; height: 30px; background: #ffffff; border: 2px solid #cbd5e1; border-radius: 8px 8px 12px 12px; margin-top: -3px;
+            width: 32px; height: 30px; background: #ffffff; border: 2px solid #cbd5e1; border-radius: 8px 8px 12px 12px; margin-top: -3px; position: relative;
         }
+
+        .mini-robot-hand-left {
+            position: absolute; left: -7px; top: 2px; width: 6px; height: 16px; background: #ffffff; border: 1.5px solid var(--robot-green); border-radius: 3px; transform-origin: top center; transition: 0.5s;
+        }
+
+        .mini-robot-hand-right {
+            position: absolute; right: -7px; top: 2px; width: 6px; height: 16px; background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 3px; transform-origin: top center; transition: 0.5s;
+        }
+
+        /* ANIMASI BUKA LAPTOP */
+        .robot-container.analyzing .mini-robot-hand-left { transform: rotate(-40deg); top: 8px; left: -2px; }
+        .robot-container.analyzing .mini-robot-hand-right { transform: rotate(40deg); top: 8px; right: -2px; }
+
+        /* LAPTOP MINI HOLOGRAM */
+        .mini-laptop {
+            width: 38px; height: 6px; background: #0f172a; border: 1px solid var(--primary-glow); border-radius: 2px; margin-top: 2px; opacity: 0; transform: scaleX(0); transition: 0.4s ease; position: relative;
+        }
+        .mini-laptop::before {
+            content: ''; position: absolute; bottom: 5px; left: 6px; width: 24px; height: 18px; background: rgba(0, 255, 170, 0.2); border: 1px solid var(--primary-glow); border-radius: 2px; transform: rotateX(20deg); opacity: 0; transition: 0.4s ease;
+        }
+
+        .robot-container.analyzing .mini-laptop { opacity: 1; transform: scaleX(1); }
+        .robot-container.analyzing .mini-laptop::before { opacity: 1; animation: screenGlow 0.5s ease infinite alternate; }
 
         .mini-robot-legs { display: flex; justify-content: space-between; width: 22px; margin-top: -2px; }
         .mini-robot-leg { width: 7px; height: 8px; background: #cbd5e1; border-radius: 0 0 3px 3px; }
@@ -90,9 +100,6 @@
         header { display: flex; justify-content: space-between; align-items: center; padding: 20px 5%; width: 100%; }
         .logo { font-size: 22px; font-weight: 800; margin-left: 45px; }
         .logo span { color: var(--primary-glow); }
-        nav { display: flex; gap: 15px; }
-        nav a { color: var(--text-gray); text-decoration: none; font-size: 13px; font-weight: 500; }
-        nav a.active { color: var(--primary-glow); }
 
         /* --- HERO CONTAINER --- */
         .hero-container {
@@ -100,39 +107,43 @@
         }
 
         .hero-left-art { display: flex; justify-content: center; align-items: center; }
-
-        .big-robot-art {
-            width: 240px; height: 250px; background: #ffffff; border-radius: 70px; position: relative; border: 5px solid #cbd5e1; box-shadow: 0 25px 50px -12px rgba(0, 255, 170, 0.2);
-        }
-
+        .big-robot-art { width: 240px; height: 250px; background: #ffffff; border-radius: 70px; position: relative; border: 5px solid #cbd5e1; box-shadow: 0 25px 50px -12px rgba(0, 255, 170, 0.2); }
         .big-robot-screen { position: absolute; top: 35px; left: 25px; width: 180px; height: 130px; background: #0f172a; border-radius: 35px; display: flex; justify-content: space-around; align-items: center; padding: 0 25px; }
         .big-robot-eye { width: 40px; height: 40px; background: var(--primary-glow); border-radius: 50%; box-shadow: 0 0 20px var(--primary-glow); }
-        .big-robot-smile { position: absolute; bottom: 35px; left: 50%; transform: translateX(-50%); width: 50px; height: 18px; border-bottom: 5px solid #0f172a; border-radius: 50%; }
 
         .hero-right-content { width: 100%; }
-        .tag-badge { background: rgba(0, 255, 170, 0.08); color: var(--primary-glow); padding: 6px 14px; border-radius: 30px; font-size: 11px; font-weight: 600; display: inline-flex; margin-bottom: 15px; border: 1px solid rgba(0, 255, 170, 0.15); }
-        .hero-right-content h1 { font-size: 38px; font-weight: 700; line-height: 1.2; margin-bottom: 15px; }
-        .hero-right-content p { color: var(--text-gray); font-size: 14px; line-height: 1.6; margin-bottom: 25px; }
+        .tag-badge { background: rgba(0, 255, 170, 0.08); color: var(--primary-glow); padding: 6px 14px; border-radius: 30px; font-size: 11px; font-weight: 600; display: inline-flex; margin-bottom: 15px; }
+        .hero-right-content h1 { font-size: 34px; font-weight: 700; margin-bottom: 15px; }
 
-        .interactive-zone { background: var(--card-dark); border: 1px solid rgba(255,255,255,0.04); border-radius: 20px; padding: 20px; box-shadow: 0 30px 60px rgba(0,0,0,0.4); }
-
+        .interactive-zone { background: var(--card-dark); border: 1px solid rgba(255,255,255,0.04); border-radius: 20px; padding: 20px; }
         .upload-area { border: 2px dashed rgba(0, 255, 170, 0.2); border-radius: 12px; padding: 25px 15px; text-align: center; cursor: pointer; background: rgba(0, 0, 0, 0.3); margin-bottom: 15px; }
         #preview { max-width: 100%; max-height: 180px; border-radius: 8px; display: none; margin: 0 auto; }
 
         .btn-action { background: var(--primary-glow); color: #030712; border: none; padding: 12px 25px; font-size: 14px; font-weight: 700; border-radius: 30px; cursor: pointer; width: 100%; justify-content: center; display: inline-flex; }
         .btn-action:disabled { background: #334155; color: #64748b; cursor: not-allowed; }
 
-        .result-box { margin-top: 20px; background: #0a1410; border-left: 4px solid var(--primary-glow); padding: 15px; border-radius: 4px 12px 12px 4px; display: none; text-align: left; line-height: 1.6; font-size: 13.5px; }
+        /* --- TAB SYSTEM UNTUK HASIL EFISIEN --- */
+        .result-wrapper { margin-top: 20px; display: none; background: #0a1410; border: 1px solid rgba(0, 255, 170, 0.15); border-radius: 12px; overflow: hidden; }
+        .tab-header { display: flex; background: #060b08; border-bottom: 1px solid rgba(0, 255, 170, 0.1); }
+        .tab-btn { flex: 1; padding: 12px; background: none; border: none; color: var(--text-gray); font-size: 12px; font-weight: 600; cursor: pointer; transition: 0.3s; text-align: center; }
+        .tab-btn.active { color: var(--primary-glow); background: #0a1410; border-bottom: 2px solid var(--primary-glow); }
+        .tab-content { padding: 15px; font-size: 13.5px; line-height: 1.6; min-height: 120px; text-align: left; }
+        
+        .result-footer { padding: 10px 15px; background: #060b08; display: flex; justify-content: flex-end; border-top: 1px solid rgba(0, 255, 170, 0.05); }
+        .btn-copy { background: rgba(0, 255, 170, 0.1); color: var(--primary-glow); border: 1px solid rgba(0, 255, 170, 0.3); padding: 6px 14px; font-size: 11px; font-weight: 600; border-radius: 6px; cursor: pointer; }
+
+        .status-box { padding: 15px; color: var(--text-gray); font-size: 13px; text-align: center; display: none; }
 
         @media (max-width: 768px) {
             .hero-container { grid-template-columns: 1fr; text-align: center; gap: 25px; }
-            .hero-right-content h1 { font-size: 28px; }
+            .hero-right-content h1 { font-size: 26px; }
             .big-robot-art { width: 180px; height: 190px; border-radius: 50px; }
             .big-robot-screen { width: 130px; height: 95px; }
             .big-robot-eye { width: 28px; height: 28px; }
         }
         @keyframes float { 0%, 100% { transform: translateY(0) scale(0.85); } 50% { transform: translateY(-6px) scale(0.85); } }
         @keyframes blink { 0%, 90%, 100% { transform: scaleY(1); } 95% { transform: scaleY(0.1); } }
+        @keyframes screenGlow { from { background: rgba(0, 255, 170, 0.15); } to { background: rgba(0, 255, 170, 0.35); } }
     </style>
 </head>
 <body>
@@ -141,32 +152,29 @@
         <path fill="none" stroke="#00ffaa" stroke-width="2" d="M0,224L60,208C120,192,240,160,360,165.3C480,171,600,213,720,208C840,203,960,149,1080,138.7C1200,128,1320,160,1380,176L1440,192"></path>
     </svg>
 
-    <div class="robot-container">
-        <div class="bubble-chat" id="robotBubble">Halo! Yuk upload chartmu..</div>
+    <!-- MINI ROBOT DENGAN LAPTOP MINI -->
+    <div class="robot-container" id="miniRobot">
         <div class="mini-robot-head">
             <div class="mini-robot-face"><div class="mini-robot-eye"></div><div class="mini-robot-eye"></div></div>
         </div>
-        <div class="mini-robot-body"></div>
+        <div class="mini-robot-body">
+            <div class="mini-robot-hand-left"></div>
+            <div class="mini-robot-hand-right"></div>
+        </div>
+        <div class="mini-laptop"></div>
         <div class="mini-robot-legs"><div class="mini-robot-leg"></div><div class="mini-robot-leg"></div></div>
     </div>
 
-    <header>
-        <div class="logo">Dika <span>Ai</span></div>
-        <nav><a href="#" class="active">Bots</a><a href="#">Markets</a><a href="#">Trade</a></nav>
-    </header>
+    <header><div class="logo">Dika <span>Ai</span></div></header>
 
     <main class="hero-container">
         <div class="hero-left-art">
-            <div class="big-robot-art">
-                <div class="big-robot-screen"><div class="big-robot-eye"></div><div class="big-robot-eye"></div></div>
-                <div class="big-robot-smile"></div>
-            </div>
+            <div class="big-robot-art"><div class="big-robot-screen"><div class="big-robot-eye"></div><div class="big-robot-eye"></div></div></div>
         </div>
 
         <div class="hero-right-content">
-            <div class="tag-badge">✓ Dika AI Mode</div>
+            <div class="tag-badge">✓ Gemini Smart Tab System Active</div>
             <h1>The Fastest and Secure<br><span style="color: var(--primary-glow);">AI Trading Assistant.</span></h1>
-            <p>Unggah tangkapan layar grafik pasar Anda untuk mendapatkan pemetaan teknikal instan langsung dari sistem AI kami.</p>
 
             <div class="interactive-zone">
                 <div class="upload-area" onclick="document.getElementById('fileInput').click()">
@@ -179,21 +187,33 @@
                 </div>
 
                 <button class="btn-action" id="btnAnalyze" onclick="mulaiAnalisa()" disabled>Mulai Analisa →</button>
-                <div class="result-box" id="resultBox"></div>
+                
+                <!-- LOADING STATUS AREA -->
+                <div class="status-box" id="statusBox"></div>
+
+                <!-- WRAPPER HASIL TAMPILAN TAB YANG EFISIEN -->
+                <div class="result-wrapper" id="resultWrapper">
+                    <div class="tab-header">
+                        <button class="tab-btn active" onclick="switchTab('trend')">📊 Trend & Market</button>
+                        <button class="tab-btn" onclick="switchTab('entry')">🎯 Entry Area</button>
+                        <button class="tab-btn" onclick="switchTab('tpsl')">🛡️ TP & SL</button>
+                    </div>
+                    <div class="tab-content" id="tabContent"></div>
+                    <div class="result-footer">
+                        <button class="btn-copy" onclick="copyResult()">📋 Copy Strategi</button>
+                    </div>
+                </div>
             </div>
         </div>
     </main>
 
     <script>
-        // Mengunci API Key ke dalam penyimpanan browser internal HP
         let GEMINI_API_KEY = localStorage.getItem("DIKA_GEMINI_KEY") || ""; 
         let base64Image = "";
         let imageMimeType = "image/jpeg";
-
-        setTimeout(() => {
-            const bubble = document.getElementById('robotBubble');
-            if(bubble) bubble.style.display = 'none';
-        }, 5000);
+        
+        // Memori Penyimpanan Data Tab Terpisah
+        let dataAnalisa = { trend: "", entry: "", tpsl: "" };
 
         function previewImage(event) {
             const file = event.target.files[0];
@@ -213,84 +233,84 @@
 
         async function mulaiAnalisa() {
             const btn = document.getElementById('btnAnalyze');
-            const resultBox = document.getElementById('resultBox');
+            const statusBox = document.getElementById('statusBox');
+            const resultWrapper = document.getElementById('resultWrapper');
+            const robot = document.getElementById('miniRobot');
             
-            // Jika memori local kosong, otomatis memunculkan kotak input pop-up di layar HP
             if (!GEMINI_API_KEY || GEMINI_API_KEY.trim() === "") {
-                const inputKey = prompt("API Key Gemini belum diset.\n\nSilakan Tempel (Paste) API Key Gemini Anda (AIzaSy...) di sini:");
+                const inputKey = prompt("Masukkan API Key Gemini Anda:");
                 if (inputKey && inputKey.trim() !== "") {
                     GEMINI_API_KEY = inputKey.trim();
                     localStorage.setItem("DIKA_GEMINI_KEY", GEMINI_API_KEY);
-                } else {
-                    resultBox.style.display = "block";
-                    resultBox.innerHTML = "<strong style='color:#ff5555;'>Error:</strong> API Key wajib diisi untuk mendeteksi gambar.";
-                    return;
-                }
+                } else return;
             }
 
-            if (!base64Image) return;
-
             btn.disabled = true;
-            btn.innerText = "Menganalisa Chart...";
-            resultBox.style.display = "block";
-            resultBox.innerHTML = "Menghubungkan ke SERVER DIKA AI...<br>Membaca pola candlestick...";
+            resultWrapper.style.display = "none";
+            statusBox.style.display = "block";
+            statusBox.innerHTML = "Robot membuka laptop...<br>Mengalkulasi struktur candlestick via Gemini API...";
+            
+            // AKTIFKAN ANIMASI BUKA LAPTOP PADA ROBOT MINI
+            robot.classList.add('analyzing');
 
-            const promptNarasi = "Analisa chart trading ini secara profesional sebagai ahli teknikal Scalping ataupun day trading. Berikan respon dengan format poin-poin yang jelas dalam Bahasa Indonesia: 1. Saran Entry (Buy/Sell/Wait) & Area Harga entry, 2. Rekomendasi Target Take Profit (TP) & Stop Loss (SL), 3. Alasan entry berdasarkan struktur pasar, candlestick pattern, support/resistance, atau indikator yang terlihat pada gambar.";
+            // Intruksi khusus meminta data terpisah dengan pemisah tag khusus agar mudah dipotong javascript
+            const promptNarasi = "Analisa chart trading ini. Kamu wajib memberikan respon dengan memisahkannya ke dalam 3 bagian menggunakan format tag persis seperti ini:\n[TREND] tulis analisa tren, struktur pasar, dan indikator di sini [/TREND]\n[ENTRY] tulis rekomendasi posisi buy/sell/wait dan angka harga masuk di sini [/ENTRY]\n[TPSL] tulis target angka batas take profit dan stop loss di sini [/TPSL]";
 
-            // Endpoint resmi Gemini 1.5 Flash yang mendukung multi-modal gambar
-            const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
-
-            const payload = {
-                contents: [{
-                    parts: [
-                        { text: promptNarasi },
-                        {
-                            inlineData: {
-                                mimeType: imageMimeType,
-                                data: base64Image
-                            }
-                        }
-                    ]
-                }]
-            };
+            const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+            const payload = { contents: [{ parts: [{ text: promptNarasi }, { inlineData: { mimeType: imageMimeType, data: base64Image } }] }] };
 
             try {
-                const response = await fetch(endpoint, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(payload)
-                });
-
+                const response = await fetch(endpoint, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
                 const data = await response.json();
                 
                 if (data.error) {
-                    resultBox.innerHTML = `<strong style='color:#ff5555;'>Gemini Error:</strong> ${data.error.message}<br><br><button onclick='resetKey()' style='padding:5px 10px; background:#ff5555; border:none; color:white; border-radius:4px; font-size:11px; cursor:pointer;'>Reset / Ganti API Key</button>`;
+                    statusBox.innerHTML = `<span style='color:#ff5555;'>Error:</span> ${data.error.message} <button onclick='localStorage.removeItem(\"DIKA_GEMINI_KEY\"); location.reload();'>Reset Key</button>`;
+                    robot.classList.remove('analyzing');
                     return;
                 }
 
-                if (data.candidates && data.candidates[0].content.parts[0].text) {
-                    let textHasil = data.candidates[0].content.parts[0].text;
-                    resultBox.innerHTML = textHasil
-                        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                        .replace(/\n/g, '<br>');
-                } else {
-                    resultBox.innerText = "Gagal memproses gambar dari server Gemini. Pastikan koneksi internet stabil.";
-                }
+                const textHasil = data.candidates[0].content.parts[0].text;
+                
+                // PARSING/MEMOTONG TEKS MENJADI FORMAT TAB YANG BERSIH
+                dataAnalisa.trend = parseTag(textHasil, "TREND");
+                dataAnalisa.entry = parseTag(textHasil, "ENTRY");
+                dataAnalisa.tpsl = parseTag(textHasil, "TPSL");
+
+                // Jika pemotongan gagal karena AI lupa cetak tag, isi dengan fallback default
+                if(!dataAnalisa.trend) dataAnalisa.trend = textHasil;
+
+                statusBox.style.display = "none";
+                resultWrapper.style.display = "block";
+                switchTab('trend'); // Buka tab pertama otomatis
 
             } catch (error) {
-                console.error(error);
-                resultBox.innerHTML = `<strong style='color:#ff5555;'>Error Koneksi:</strong> Gagal terhubung ke server Google AI Studio.`;
+                statusBox.innerHTML = "<span style='color:#ff5555;'>Gagal menyambung ke server Google Studio.</span>";
             } finally {
                 btn.disabled = false;
-                btn.innerText = "Mulai Analisa →";
+                // TUTUP KEMBALI LAPTOP ROBOT
+                robot.classList.remove('analyzing');
             }
         }
 
-        function resetKey() {
-            localStorage.removeItem("DIKA_GEMINI_KEY");
-            GEMINI_API_KEY = "";
-            alert("API Key lama dihapus. Silakan klik ulang tombol analisa untuk memasukkan Key baru.");
-            location.reload();
+        function parseTag(text, tag) {
+            const regex = new RegExp(`\\[${tag}\\]([\\s\\S]*?)\\[\\/${tag}\\]`, "i");
+            const match = text.match(regex);
+            return match ? match[1].trim().replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>') : "";
+        }
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('tabContent').innerHTML = dataAnalisa[tabName] || "Data tidak ditemukan.";
+            
+            // Beri warna aktif pada tombol tab yang dipilih
+            const indexMap = { 'trend': 0, 'entry': 1, 'tpsl': 2 };
+            document.querySelectorAll('.tab-btn')[indexMap[tabName]].classList.add('active');
+        }
+
+        function copyResult() {
+            const gabunganTeks = `== STRATEGI DIKA AI ==\n\n[1. Trend & Market]\n${dataAnalisa.trend.replace(/<br>/g, '\n').replace(/<\/?[^>]+(>|$)/g, "")}\n\n[2. Entry Area]\n${dataAnalisa.entry.replace(/<br>/g, '\n').replace(/<\/?[^>]+(>|$)/g, "")}\n\n[3. Target TP & SL]\n${dataAnalisa.tpsl.replace(/<br>/g, '\n').replace(/<\/?[^>]+(>|$)/g, "")}`;
+            navigator.clipboard.writeText(gabunganTeks);
+            alert("Strategi trading berhasil disalin ke clipboard!");
         }
     </script>
 </body>
