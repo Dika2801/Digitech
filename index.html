@@ -126,7 +126,6 @@
 
         .hero-left-art { display: flex; justify-content: center; align-items: center; width: 100%; }
         
-        /* ICON KEPALA ROBOT DIPERKECIL */
         .big-robot-art { width: 170px; height: 180px; background: #ffffff; border-radius: 50px; position: relative; border: 4px solid #cbd5e1; box-shadow: 0 20px 40px -10px rgba(0, 255, 170, 0.2); }
         .big-robot-screen { position: absolute; top: 25px; left: 18px; width: 130px; height: 95px; background: #0f172a; border-radius: 25px; display: flex; justify-content: space-around; align-items: center; padding: 0 18px; }
         .big-robot-eye { width: 28px; height: 28px; background: var(--primary-glow); border-radius: 50%; box-shadow: 0 0 15px var(--primary-glow); }
@@ -146,9 +145,9 @@
             display: inline-block; white-space: nowrap; color: #ff5555; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; padding-left: 100%; animation: marquee 15s linear infinite;
         }
 
-        /* BARU: KOLOM INPUT API KEY MODERN */
+        /* INPUT KOLOM API KEY */
         .api-key-box {
-            display: flex; gap: 8px; margin-bottom: 15px; width: 100%;
+            display: flex; gap: 8px; margin-bottom: 8px; width: 100%;
         }
         .api-key-input {
             flex: 1; background: rgba(0,0,0,0.5); border: 1px solid rgba(0, 255, 170, 0.2);
@@ -157,7 +156,16 @@
         .api-key-input:focus { border-color: var(--primary-glow); }
         .btn-save-key { background: rgba(0, 255, 170, 0.15); color: var(--primary-glow); border: 1px solid var(--primary-glow); padding: 0 15px; font-size: 11px; font-weight: 600; border-radius: 8px; cursor: pointer; }
 
-        /* BARU: FITUR 3 MODE TRADING */
+        /* BARU: TOMBOL DAPATKAN API KEY LINK EKSTERNAL */
+        .get-key-link-btn {
+            display: block; width: 100%; text-align: center; text-decoration: none;
+            background: rgba(255, 255, 255, 0.03); color: var(--primary-glow);
+            border: 1px dashed rgba(0, 255, 170, 0.3); padding: 8px; border-radius: 8px;
+            font-size: 11px; font-weight: 600; margin-bottom: 15px; transition: 0.2s;
+        }
+        .get-key-link-btn:hover { background: rgba(0, 255, 170, 0.05); }
+
+        /* FITUR 3 MODE TRADING */
         .mode-container {
             display: flex; gap: 8px; margin-bottom: 15px; width: 100%;
         }
@@ -246,7 +254,7 @@
     <!-- MINI ROBOT POJOK KIRI ATAS -->
     <div class="robot-container" id="miniRobot">
         <div class="hologram-ray-up"></div>
-        <div class="bubble-chat">Halo! Saya Dika AI Assistant Trading mu..<br>Yuk upload screenshot chartmu..</div>
+        <div class="bubble-chat">Halo! Yuk upload chartmu..</div>
         <div class="mini-robot-head">
             <div class="mini-robot-face"><div class="mini-robot-eye"></div><div class="mini-robot-eye"></div></div>
         </div>
@@ -268,7 +276,7 @@
         </div>
 
         <div class="hero-right-content">
-            <div class="tag-badge">✓ DIKA AI 1.1 Pro Multimode Active</div>
+            <div class="tag-badge">✓ Dika Ai v1.1 Multi-Pool Cache Engine</div>
             <h1>The Fastest and Secure<br><span style="color: var(--primary-glow);">AI Trading Assistant.</span></h1>
 
             <div class="interactive-zone">
@@ -276,13 +284,16 @@
                     <div class="running-text">sebelum menggunakan ai ini pastikan anda sudah memiliki api key gemini!!</div>
                 </div>
 
-                <!-- BARU: INPUT KOLOM API KEY VISUAL MODERN -->
+                <!-- INPUT KOLOM API KEY VISUAL MODERN -->
                 <div class="api-key-box">
                     <input type="password" class="api-key-input" id="apiKeyField" placeholder="Masukkan API Key Gemini Anda (AIzaSy...)">
                     <button class="btn-save-key" id="btnSaveKey" onclick="saveApiKey()">Simpan</button>
                 </div>
 
-                <!-- BARU: PILIHAN 3 MODE TRADING -->
+                <!-- CARA 2: TOMBOL DIKLIIK LANGSUNG DIARAHKAN KE WEB PEMBUATAN TOKEN GEMINI -->
+                <a href="https://aistudio.google.com/app/apikey" target="_blank" class="get-key-link-btn">🔑 Belum Punya Token? Klik Buat API Key Gratis</a>
+
+                <!-- PILIHAN 3 MODE TRADING -->
                 <div class="mode-container">
                     <button class="mode-btn selected" id="mode-scalping" onclick="selectMode('scalping')">⏱ Scalping</button>
                     <button class="mode-btn" id="mode-day" onclick="selectMode('day')">📅 Day Trading</button>
@@ -324,17 +335,24 @@
     </a>
 
     <footer>
-        -copyright @2026 oleh Andika-<br>
-        seluruh lisensi berizin dan dilindungi undang-undang
+        -copyright 2026 oleh Andika-<br>
+        "seluruh lisensi berizin dan dilindungi undang-undang"
     </footer>
 
     <script>
+        // CARA 1: POOL MULTI-API KEY (SILAKAN LU ISI 3 SAMPAI 5 API KEY PUNYA LU DI SINI BUAT DI-ROTASI)
+        const KUNCI_CADANGAN = [
+            "AQ.Ab8RN6JzMdkgMuIj1fKM_nyUuaVxUdwszdvZUY_ia_DMMLoynA",
+            "AQ.Ab8RN6IGXSQfCw5zZ6CAwLYW88jX6tC5GYIKfxWyBlKDefNpqA",
+            "AIzaSyYourKeyGammaHereABCDE"
+        ];
+        let indeksKunciSekarang = 0;
+
         let base64Image = "";
         let imageMimeType = "image/jpeg";
-        let activeMode = "scalping"; // Default Mode
+        let activeMode = "scalping";
         let dataAnalisa = { trend: "", entry: "", tpsl: "" };
 
-        // Tampilkan Masking Key jika sudah tersimpan di browser
         window.onload = function() {
             let savedKey = localStorage.getItem("DIKA_GEMINI_KEY");
             if(savedKey) {
@@ -354,14 +372,14 @@
                 btn.innerText = "Simpan";
                 btn.style.borderColor = "var(--primary-glow)";
                 btn.style.color = "var(--primary-glow)";
-                alert("API Key berhasil dihapus.");
+                alert("API Key pribadi dihapus. Aplikasi kembali menggunakan server kuota cadangan.");
             } else {
                 if(field.value.trim() !== "") {
                     localStorage.setItem("DIKA_GEMINI_KEY", field.value.trim());
                     btn.innerText = "Reset";
                     btn.style.borderColor = "#ff4d4d";
                     btn.style.color = "#ff4d4d";
-                    alert("API Key berhasil disimpan secara lokal!");
+                    alert("API Key pribadi berhasil disimpan!");
                 } else {
                     alert("Ketik API Key terlebih dahulu, bro!");
                 }
@@ -390,29 +408,52 @@
             }
         }
 
+        // FUNGSI UNTUK ROTASI OTOMATIS JIKA API KEY INDUK SIBUK
+        function dapatkanApiKeySistem() {
+            let userKey = localStorage.getItem("DIKA_GEMINI_KEY");
+            if (userKey && userKey.trim() !== "") return userKey;
+            
+            // Mengambil dari pool cadangan secara bergantian
+            let keyRotasi = KUNCI_CADANGAN[indeksKunciSekarang];
+            indeksKunciSekarang = (indeksKunciSekarang + 1) % KUNCI_CADANGAN.length;
+            return keyRotasi;
+        }
+
         async function mulaiAnalisa() {
             const btn = document.getElementById('btnAnalyze');
             const statusBox = document.getElementById('statusBox');
             const resultWrapper = document.getElementById('resultWrapper');
             const robot = document.getElementById('miniRobot');
             
-            let keyToUse = localStorage.getItem("DIKA_GEMINI_KEY");
-            if (!keyToUse) {
-                alert("Simpan API Key Gemini lu dulu di kolom atas sebelum klik analisa!");
-                return;
-            }
+            let tokenAktif = dapatkanApiKeySistem();
 
             btn.disabled = true;
             resultWrapper.style.display = "none";
             statusBox.style.display = "block";
-            statusBox.innerHTML = `Mata robot memancarkan laser ke atas...<br>Robot sedang Memproses strategi <strong>${activeMode.toUpperCase()}</strong> dalam server kami...`;
             
+            // CARA 3: FITUR CACHE LOKAL GAMBAR (ANTI-PEMBOROSAN KUOTA)
+            let idCacheLokal = `cache_${activeMode}_${base64Image.substring(0, 100)}`;
+            let dataCacheTersimpan = localStorage.getItem(idCacheLokal);
+
+            if(dataCacheTersimpan) {
+                statusBox.innerHTML = "Memuat struktur data dari cache memori lokal secara instan... (Hemat Token 100%)";
+                setTimeout(() => {
+                    let parsedCache = JSON.parse(dataCacheTersimpan);
+                    dataAnalisa = parsedCache;
+                    statusBox.style.display = "none";
+                    resultWrapper.style.display = "block";
+                    switchTab('trend');
+                    btn.disabled = false;
+                }, 800);
+                return;
+            }
+
+            statusBox.innerHTML = `Mata robot menancarkan laser ke atas...<br>Robot Memproses strategi <strong>${activeMode.toUpperCase()}</strong> dalam server kami...`;
             robot.classList.add('analyzing');
 
-            // Narasi disesuaikan secara dinamis mengikuti activeMode yang dipilih user
-            const promptNarasi = `Analisa chart trading ini secara profesional khusus untuk gaya strategi ${activeMode.toUpperCase()}. Kamu wajib memberikan respon dengan memisahkannya ke dalam 3 bagian menggunakan format tag persis seperti ini:\n[TREND] tulis analisa tren, struktur pasar, dan indikator di sini [/TREND]\n[ENTRY] tulis rekomendasi posisi buy/sell/wait dan angka harga masuk spesifik bergaya ${activeMode} di sini [/ENTRY]\n[TPSL] tulis target angka batas take profit dan stop loss logis sesuai target ${activeMode} di sini [/TPSL]`;
+            const promptNarasi = `Analisa chart trading ini secara profesional khusus untuk gaya strategi ${activeMode.toUpperCase()}. Kamu wajib memberikan respon dengan memisahkannya ke dalam 3 bagian menggunakan format tag persis seperti ini:\n[TREND] tulis analisa tren, struktur pasar, dan indikator di sini [/TREND]\n[ENTRY] tulis rekomendasi posisi buy/sell/wait dan angka harga masuk di sini [/ENTRY]\n[TPSL] tulis target angka batas take profit dan stop loss di sini [/TPSL]`;
 
-            const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${keyToUse}`;
+            const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${tokenAktif}`;
             const payload = { contents: [{ parts: [{ text: promptNarasi }, { inlineData: { mimeType: imageMimeType, data: base64Image } }] }] };
 
             try {
@@ -420,7 +461,7 @@
                 const data = await response.json();
                 
                 if (data.error) {
-                    statusBox.innerHTML = `<span style='color:#ff5555;'>Error:</span> ${data.error.message}`;
+                    statusBox.innerHTML = `<span style='color:#ff5555;'>Server Sibuk/Limit.</span> Silakan coba klik analisa lagi untuk memicu rotasi kunci server otomatis.`;
                     robot.classList.remove('analyzing');
                     return;
                 }
@@ -432,6 +473,9 @@
                 dataAnalisa.tpsl = parseTag(textHasil, "TPSL");
 
                 if(!dataAnalisa.trend) dataAnalisa.trend = textHasil;
+
+                // SIMPAN HASIL BARU KE CACHE BIAR KALAU DIKLIK LAGI TIDAK MAKAN TOKEN
+                localStorage.setItem(idCacheLokal, JSON.stringify(dataAnalisa));
 
                 statusBox.style.display = "none";
                 resultWrapper.style.display = "block";
@@ -448,7 +492,7 @@
         function parseTag(text, tag) {
             const regex = new RegExp(`\\[${tag}\\]([\\s\\S]*?)\\[\\/${tag}\\]`, "i");
             const match = text.match(regex);
-            return match ? match[1].trim().replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>') : "";
+            return match ? match[1].trim().replace(/\*\*(.*?)\*\"/g, '<strong>$1</strong>').replace(/\n/g, '<br>') : "";
         }
 
         function switchTab(tabName) {
@@ -466,4 +510,4 @@
         }
     </script>
 </body>
-                    </html>
+    </html>
