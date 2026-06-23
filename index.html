@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Dika Ai Analisa Trading</title>
@@ -336,11 +339,9 @@
                     </div>
                     <img id="preview" alt="Preview">
                 </div>
+                <div style="width: 100%; text-align: center; margin: 15px 0; background: rgba(0,0,0,0.2); padding: 5px; border-radius: 8px;">
 
-               <div style="width: 100%; text-align: center; margin: 15px 0; background: rgba(0,0,0,0.2); padding: 5px; border-radius: 8px;">
-
-               
-    <script>atOptions = {
+             <script>atOptions = {
     'key' : '725f3d2e791a41ada214b5d40fbedadb',
     'format' : 'iframe',
     'height' : 60,
@@ -348,7 +349,7 @@
     'params' : {}
   };
 </script>
-<script src="https://www.highperformanceformat.com/725f3d2e791a41ada214b5d40fbedadb/invoke.js"></script> </div>
+<script src="https://www.highperformanceformat.com/725f3d2e791a41ada214b5d40fbedadb/invoke.js"></script></div>
 
                 <button class="btn-action" id="btnAnalyze" onclick="mulaiAnalisa()" disabled>Mulai Analisa →</button>
                 
@@ -371,7 +372,7 @@
 
     <a href="https://wa.me/6285879324582" class="btn-wa-floating" target="_blank" title="Hubungi Admin WhatsApp">
         <svg viewBox="0 0 24 24">
-            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588I3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.717-1.456L0 24zm6.59-4.846c1.66.986 3.288 1.488 4.654 1.493 5.433-.001 9.85-4.414 9.853-9.84.002-2.63-1.023-5.101-2.885-6.963C16.406 1.983 13.93 1.01 12.012 1.01c-5.436 0-9.855 4.414-9.858 9.843-.001 1.542.413 3.01 1.2 4.258l-.988 3.612 3.681-.965zm12.369-6.423c-.274-.136-1.62-.8-1.871-.892-.252-.093-.435-.137-.617.137-.182.274-.707.892-.867 1.075-.16.182-.32.206-.593.07-1.124-.563-1.884-.974-2.639-2.268-.198-.34.198-.316.567-1.054.06-.118.03-.223-.015-.316-.045-.093-.435-1.05-.595-1.436-.157-.377-.33-.326-.452-.332-.117-.006-.251-.007-.386-.007-.135 0-.356.05-.542.254-.187.206-.713.697-.713 1.701 0 1.004.73 1.976.832 2.113.102.137 1.437 2.195 3.481 3.078.487.21 1.012.336 1.41.365.49.035.936-.188 1.288-.242.392-.06 1.62-.663 1.848-1.302.228-.64.228-1.188.16-1.302-.069-.115-.252-.207-.525-.344z"/>
+            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.717-1.456L0 24zm6.59-4.846c1.66.986 3.288 1.488 4.654 1.493 5.433-.001 9.85-4.414 9.853-9.84.002-2.63-1.023-5.101-2.885-6.963C16.406 1.983 13.93 1.01 12.012 1.01c-5.436 0-9.855 4.414-9.858 9.843-.001 1.542.413 3.01 1.2 4.258l-.988 3.612 3.681-.965zm12.369-6.423c-.274-.136-1.62-.8-1.871-.892-.252-.093-.435-.137-.617.137-.182.274-.707.892-.867 1.075-.16.182-.32.206-.593.07-1.124-.563-1.884-.974-2.639-2.268-.198-.34.198-.316.567-1.054.06-.118.03-.223-.015-.316-.045-.093-.435-1.05-.595-1.436-.157-.377-.33-.326-.452-.332-.117-.006-.251-.007-.386-.007-.135 0-.356.05-.542.254-.187.206-.713.697-.713 1.701 0 1.004.73 1.976.832 2.113.102.137 1.437 2.195 3.481 3.078.487.21 1.012.336 1.41.365.49.035.936-.188 1.288-.242.392-.06 1.62-.663 1.848-1.302.228-.64.228-1.188.16-1.302-.069-.115-.252-.207-.525-.344z"/>
         </svg>
     </a>
 
@@ -381,6 +382,28 @@
     </footer>
 
     <script>
+      // Tempel ini di baris paling atas di dalam tag <script> lu
+(async function checkVersionCache() {
+    try {
+        const currentUrl = window.location.href.split('?')[0];
+        // Ping ringan ke GitHub dengan timestamp unik agar tidak dibohongi cache Android
+        const response = await fetch(`${currentUrl}?t=${new Date().getTime()}`, { method: 'HEAD', cache: 'no-store' });
+        const etag = response.headers.get('ETag') || response.headers.get('Last-Modified');
+        
+        if (etag) {
+            const savedEtag = localStorage.getItem('APP_VERSION_TAG');
+            // Jika kode di GitHub berbeda dengan cache di HP, hancurkan cache & reload paksa
+            if (savedEtag && savedEtag !== etag) {
+                localStorage.setItem('APP_VERSION_TAG', etag);
+                window.location.reload(true);
+            } else {
+                localStorage.setItem('APP_VERSION_TAG', etag);
+            }
+        }
+    } catch (e) {
+        console.log("Offline mode atau update dilewati");
+    }
+})();
         // POOL MULTI-API KEY UNTUK ROTASI OTOMATIS
         const KUNCI_CADANGAN = [
             "AQ.Ab8RN6JzMdkgMuIj1fKM_nyUuaVxUdwszdvZUY_ia_DMMLoynA",
