@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dika Ai Analisa Trading</title>
+    <style>
+        /* --- TEMA CORE: DARK GREEN NEON LOKAL --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: #050a0e;
+            color: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 15px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 420px;
+            background-color: #0b1219;
+            border: 1px solid #16222f;
+            border-radius: 24px;
+            padding: 20px;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.7);
+        }
+
+        /* Running Text / Alert Merah di Atas */
+        .marquee-alert {
+            background-color: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.25);
+            color: #ef4444;
+            font-size: 11px;
+            font-weight: 800;
+            padding: 10px;
+            border-radius: 10px;
+            text-align: center;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            letter-spacing: 0.5px;
+        }
+
+        /* --- LOGIC INPUT TOKEN & ARENA ROBOT KEMARIN --- */
+        .token-area {
+            position: relative;
+            margin-bottom: 20px;
+            padding-top: 35px; /* Spasi biar robot gak nutupin teks atas */
+        }
+
+        /* Robot Chibi Kemarin Bermata Hijau Neon */
+        .robot-chibi-melayang {
+            width: 65px;
+            height: 65px;
+            background-image: url('https://img.freepik.com/free-vector/floating-robot-cartoon-vector-illustration_138676-2744.jpg');
+            background-size: cover;
+            position: absolute;
+            top: -25px;
+            left: 35px;
+            z-index: 10;
+            filter: drop-shadow(0 0 8px #00ff88);
+            animation: floatRobot 3s infinite ease-in-out;
+        }
+
+        .flex-input {
+            display: flex;
+            gap: 10px;
+        }
+        .input-mock {
+            flex: 1;
+            background-color: #070d14;
+            border: 1px solid #1f2d3d;
+            border-radius: 10px;
+            padding: 12px;
+            color: #4b5563;
+            font-size: 14px;
+            letter-spacing: 2px;
+        }
+        .btn-reset {
+            background-color: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            padding: 0 15px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        /* Sub-link Hijau di Bawah Token */
+        .link-buat-api {
+            display: block;
+            text-align: center;
+            font-size: 11px;
+            color: #00ff88;
+            font-weight: 700;
+            text-decoration: none;
+            margin-top: 10px;
+            background: rgba(0, 255, 136, 0.05);
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px dashed rgba(0, 255, 136, 0.2);
+        }
+
+        /* --- NAVIGATION TABS STYLE --- */
+        .tab-menu {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        .tab-item {
+            flex: 1;
+            background-color: #0d1720;
+            border: 1px solid #1e293b;
+            padding: 10px 5px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 12px;
+            font-weight: 700;
+            color: #94a3b8;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+        .tab-item.active {
+            background-color: rgba(0, 255, 136, 0.05);
+            border-color: #00ff88;
+            color: #00ff88;
+            box-shadow: inset 0 0 10px rgba(0, 255, 136, 0.1);
+        }
+
+        /* --- DASHED DRAG & DROP BOX --- */
+        .dropzone-chart {
+            border: 2px dashed #162e26;
+            background-color: #070d14;
+            border-radius: 16px;
+            height: 240px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        .dropzone-inner {
+            text-align: center;
+            color: #475569;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        .preview-img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            position: absolute;
+            inset: 0;
+            background-color: #02060c;
+        }
+
+        /* --- CORE ACTION BUTTON --- */
+        .btn-mulai-analisa {
+            width: 100%;
+            background-color: #00ff88;
+            color: #050a0e;
+            border: none;
+            padding: 15px;
+            border-radius: 30px; /* Melengkung penuh oval sesuai screenshot */
+            font-size: 14px;
+            font-weight: 800;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            transition: 0.2s;
+            box-shadow: 0 4px 20px rgba(0, 255, 136, 0.3);
+            text-transform: capitalize;
+        }
+        .btn-mulai-analisa:hover {
+            background-color: #00dd77;
+            transform: scale(1.01);
+        }
+
+        /* --- OUTPUT RESPONSIVE PANEL --- */
+        .panel-hasil-lokal {
+            background: linear-gradient(180deg, #0d1722, #080f16);
+            border: 1px solid #1e3a2f;
+            border-radius: 16px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+        .judul-tren-bullish { color: #00ff88; font-weight: 800; font-size: 16px; text-align: center; }
+        .judul-tren-bearish { color: #ef4444; font-weight: 800; font-size: 16px; text-align: center; }
+
+        /* Floating WhatsApp Icon di Pojok Kanan Bawah */
+        .wa-float-link {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #25d366;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+            z-index: 999;
+        }
+
+        /* Footer Copyright */
+        .footer-cr {
+            text-align: center;
+            font-size: 10px;
+            color: #334155;
+            margin-top: 25px;
+            line-height: 1.5;
+            font-weight: 500;
+        }
+
+        /* --- KEYFRAMES ANIMASI FLUID --- */
+        @keyframes floatRobot {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-6px); }
+            100% { transform: translateY(0px); }
+        }
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <!-- ALERT BOX ATAS -->
+        <div class="marquee-alert">
+            MENGGUNAKAN OFFLINE CORE AI MATRIX ! ..SISTEM TRADING AKTIF
+        </div>
+
+        <!-- AREA INPUT TOKEN & ROBOT -->
+        <div class="token-area">
+            <!-- Robot Melayang Khas Kemarin -->
+            <div class="robot-chibi-melayang"></div>
+            
+            <div class="flex-input">
+                <input type="text" class="input-mock" value="••••••••••••••••••••••••••••••••••••••••" disabled />
+                <button class="btn-reset">Reset</button>
+            </div>
+            
+            <a href="#" class="link-buat-api">
+                🔑 Berhasil Terhubung Ke Otak AI Lokal NumPy (Tanpa Limit Quota)
+            </a>
+        </div>
+
+        <!-- NAVIGATION MODE TABS -->
+        <div class="tab-menu">
+            <div class="tab-item active" onclick="pilihTab(this)">⏱ Scalping</div>
+            <div class="tab-item" onclick="pilihTab(this)">📅 Day Trading</div>
+            <div class="tab-item" onclick="pilihTab(this)">🌊 Swing</div>
+        </div>
+
+        <!-- ZONE UPLOAD SCREENSHOT CHART -->
+        <label class="dropzone-chart" id="boxKlik">
+            <div class="dropzone-inner" id="textDefault">
+                <span style="font-size: 28px; display: block; margin-bottom: 5px;">🖼</span>
+                Ketuk Untuk Pilih Screenshot Chart
+            </div>
+            <input type="file" id="inputFile" class="hidden" accept="image/*" />
+            <img id="viewChart" class="preview-img hidden" />
+        </label>
+
+        <!-- EXECUTE BUTTON -->
+        <button id="btnKlikAnalisa" class="btn-mulai-analisa hidden">Mulai Analisa →</button>
+
+        <!-- BOX OUTPUT HASIL JOSS -->
+        <div id="panelLaporan" class="panel-hasil-lokal hidden">
+            <div id="isiKonten"></div>
+        </div>
+
+        <!-- FOOTER SECTION -->
+        <div class="footer-cr">
+            copyright 2026 oleh Andika<br>seluruh lisensi berizin dan dilindungi undang-undang
+        </div>
+
+    </div>
+
+    <!-- WHATSAPP FLOATING BUTTON -->
+    <a href="https://wa.me/#" class="wa-float-link" target="_blank">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.513 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.5-5.739-1.451L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.864-9.799.002-2.63-1.023-5.101-2.885-6.966C16.528 1.975 14.057 1.053 11.43 1.051c-5.44 0-9.866 4.372-9.87 9.802 0 1.689.476 3.336 1.378 4.795L1.92 20.218l4.727-1.064z"/></svg>
+    </a>
+
+    <script>
+        const inputFile = document.getElementById('inputFile');
+        const viewChart = document.getElementById('viewChart');
+        const textDefault = document.getElementById('textDefault');
+        const btnKlikAnalisa = document.getElementById('btnKlikAnalisa');
+        const panelLaporan = document.getElementById('panelLaporan');
+        const isiKonten = document.getElementById('isiKonten');
+
+        // Fungsi Ganti Tab
+        function pilihTab(elemen) {
+            document.querySelectorAll('.tab-item').forEach(item => item.classList.remove('active'));
+            elemen.classList.add('active');
+        }
+
+        // Pemicu Upload Galeri HP
+        inputFile.addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    viewChart.src = e.target.result;
+                    viewChart.classList.remove('hidden');
+                    textDefault.classList.add('hidden');
+                    btnKlikAnalisa.classList.remove('hidden');
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Kirim Ajax Request ke Python Core
+        btnKlikAnalisa.addEventListener('click', async function() {
+            btnKlikAnalisa.innerText = "Sedang Menganalisis...";
+            btnKlikAnalisa.disabled = true;
+
+            const formData = new FormData();
+            formData.append('chart_image', inputFile.files[0]);
+
+            try {
+                const response = await fetch('/analisa', { method: 'POST', body: formData });
+                const res = await response.json();
+                
+                panelLaporan.classList.remove('hidden');
+                
+                if (res.status === 'success') {
+                    const isBullish = res.tren === 'BULLISH';
+                    
+                    isiKonten.innerHTML = `
+                        <div class="${isBullish ? 'judul-tren-bullish' : 'judul-tren-bearish'}" style="margin-bottom:10px;">
+                            ${isBullish ? '📈' : '📉'} TREN UTAMA: ${res.tren}
+                        </div>
+                        <div style="font-size:12px; color:#e2e8f0; line-height:1.6; font-weight:600;">
+                            <p style="color:#fbbf24; text-align:center; margin-bottom:12px;">🔥 Kekuatan Sinyal: ${res.kekuatan}%</p>
+                            <div style="border-top:1px solid #1e293b; padding-top:8px; margin-top:5px;">
+                                <span style="color:#00ff88;">📌 SETUP STRATEGI:</span><br>
+                                • Aksi Posisi : <b>${res.aksi}</b><br>
+                                • Area Entry  : ${res.entry}<br>
+                                • Target Profit: 20-30 Pips cepat<br>
+                                • Batas Risiko : Ketat di ekor candle terluar
+                            </div>
+                            <div style="margin-top:10px; font-size:11px; color:#64748b; font-weight:500;">
+                                <span style="color:#94a3b8; font-weight:700;">🧐 ALASAN VISUAL LOKAL:</span><br>
+                                ${res.alasan}
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    isiKonten.innerHTML = `<p style="color:#ef4444; font-size:12px; text-align:center;">❌ File otak_ai_numpy.npz tidak terbaca!</p>`;
+                }
+            } catch (err) {
+                isiKonten.innerHTML = `<p style="color:#ef4444; font-size:12px; text-align:center;">❌ Hubungan server Python terputus!</p>`;
+            }
+            btnKlikAnalisa.innerText = "Mulai Analisa →";
+            btnKlikAnalisa.disabled = false;
+        });
+    </script>
+</body>
+</html>
