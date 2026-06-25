@@ -32,9 +32,9 @@
         }
 
         .marquee-alert {
-            background-color: rgba(0, 255, 136, 0.1);
-            border: 1px solid rgba(0, 255, 136, 0.25);
-            color: #00ff88;
+            background-color: rgba(251, 191, 36, 0.1);
+            border: 1px solid rgba(251, 191, 36, 0.25);
+            color: #fbbf24;
             font-size: 11px;
             font-weight: 800;
             padding: 10px;
@@ -205,7 +205,7 @@
 
     <div class="container">
         <div id="statusLoad" class="marquee-alert">
-            MENGHUBUNGKAN LANGSUNG KE DATA .NPY AI...
+            ⏳ MENYAMBUNGKAN MEMORI .NPY AI...
         </div>
 
         <div class="token-area">
@@ -215,7 +215,7 @@
                 <button class="btn-reset">Reset</button>
             </div>
             <a href="#" class="link-buat-api">
-                🔗 TERHUBUNG LANGSUNG KE FILE MATRIKS ASLI LU
+                🔗 CHIP SENSOR: DIRECT NEURAL CONNECTIVITY
             </a>
         </div>
 
@@ -225,16 +225,18 @@
             <div class="tab-item" onclick="pilihTab(this)">🌊 Swing</div>
         </div>
 
-        <label class="dropzone-chart" id="boxKlik">
+        <!-- Tombol Unggah Gambar (Sekarang Dibuat Selalu Bisa Diklik Tanpa Hambatan) -->
+        <label class="dropzone-chart" id="boxKlik" for="inputFile">
             <div class="dropzone-inner" id="textDefault">
                 <span style="font-size: 28px; display: block; margin-bottom: 5px;">🖼</span>
                 Ketuk Untuk Pilih Screenshot Chart
             </div>
-            <input type="file" id="inputFile" class="hidden" accept="image/*" />
+            <input type="file" id="inputFile" style="display: none !important;" accept="image/*" />
             <img id="viewChart" class="preview-img hidden" />
         </label>
 
-        <button id="btnKlikAnalisa" class="btn-mulai-analisa hidden" disabled>Memuat Memori AI...</button>
+        <!-- Tombol Analisa Muncul Setelah Gambar Dipilih -->
+        <button id="btnKlikAnalisa" class="btn-mulai-analisa hidden">Mencoba Sinkronisasi...</button>
 
         <canvas id="canvasMataAI" width="32" height="32" class="hidden"></canvas>
 
@@ -260,8 +262,9 @@
 
         let bobotAsli = null;
         let biasAsli = null;
+        let aiReady = false;
 
-        // SEED NYJPS: MEMBACA LANGSUNG FILE .NPY UTUH DI REPOSITORY
+        // LOAD FILE .NPY SECARA ASINKRONUS (TIDAK MENGUNCI TOMBOL UPLOAD)
         const npy = new npyjs();
         
         Promise.all([
@@ -270,13 +273,20 @@
         ]).then(([bobotData, biasData]) => {
             bobotAsli = bobotData.data; 
             biasAsli = biasData.data;
+            aiReady = true;
             
-            statusLoad.innerText = "🤖 MEMORI DATA AI AKTIF & ONLINE!";
+            statusLoad.innerText = "🤖 MEMORI DATA AI ASLI AKTIF & ONLINE!";
+            statusLoad.style.backgroundColor = "rgba(0, 255, 136, 0.1)";
             statusLoad.style.borderColor = "#00ff88";
-            btnKlikAnalisa.innerText = "Mulai Analisa →";
-            btnKlikAnalisa.disabled = false;
+            statusLoad.style.color = "#00ff88";
+            
+            if (!btnKlikAnalisa.classList.contains('hidden')) {
+                btnKlikAnalisa.innerText = "Mulai Analisa →";
+            }
         }).catch(err => {
-            statusLoad.innerText = "❌ GAGAL MEMBACA FILE .NPY LU";
+            statusLoad.innerText = "❌ FILE .NPY BELUM DI-UPLOAD / TYPO NAMA";
+            statusLoad.style.backgroundColor = "rgba(239, 68, 68, 0.1)";
+            statusLoad.style.borderColor = "#ef4444";
             statusLoad.style.color = "#ef4444";
             console.error(err);
         });
@@ -286,6 +296,7 @@
             elemen.classList.add('active');
         }
 
+        // AKSI JIKA USER MEMILIH GAMBAR (LANGSUNG BEKERJA INSTAN)
         inputFile.addEventListener('change', function() {
             const file = this.files[0];
             if (file) {
@@ -294,17 +305,27 @@
                     viewChart.src = e.target.result;
                     viewChart.classList.remove('hidden');
                     textDefault.classList.add('hidden');
+                    
+                    // Munculkan tombol analisa
                     btnKlikAnalisa.classList.remove('hidden');
+                    if (aiReady) {
+                        btnKlikAnalisa.innerText = "Mulai Analisa →";
+                    } else {
+                        btnKlikAnalisa.innerText = "Menunggu Sinkronisasi .NPY...";
+                    }
                 }
                 reader.readAsDataURL(file);
             }
         });
 
-        // PROSES HITUNG FEEDFORWARD ASLI DARI FILE NYATA LU
+        // PROSES HITUNG FEEDFORWARD ASLI JARINGAN SARAF TIRUAN LU
         btnKlikAnalisa.addEventListener('click', function() {
-            if(!bobotAsli || !biasAsli) return;
+            if (!aiReady) {
+                alert("Mohon tunggu sebentar, file matriks AI (bobot.npy / bias.npy) sedang didownload browser atau belum kamu upload di folder GitHub!");
+                return;
+            }
 
-            btnKlikAnalisa.innerText = "Deep Learning Matrix Processing...";
+            btnKlikAnalisa.innerText = "Deep Learning Neural Network Processing...";
             btnKlikAnalisa.disabled = true;
 
             setTimeout(() => {
@@ -314,7 +335,6 @@
                 let dotProduct = 0;
                 let idx = 0;
 
-                // Membedah 1024 kombinasi baris piksel gambar asli
                 for (let i = 0; i < imgData.length; i += 4) {
                     let grayscale = (imgData[i] + imgData[i+1] + imgData[i+2]) / 3 / 255.0;
                     if(idx < bobotAsli.length) {
@@ -323,7 +343,6 @@
                     }
                 }
 
-                // Masuk ke Rumus Aktivasi Jaringan Saraf Tiruan Asli Lu
                 let netInput = dotProduct + biasAsli[0];
                 let prediksiAktif = 1 / (1 + Math.exp(-netInput));
 
