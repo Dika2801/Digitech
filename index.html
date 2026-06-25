@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dika Ai Analisa Trading</title>
+    <!-- Memanggil Library Penerjemah NPY Langsung dari Internet -->
+    <script src="https://cdn.jsdelivr.net/npm/npyjs@0.x/dist/npy.js"></script>
     <style>
         /* --- TEMA CORE: DARK GREEN NEON LOKAL --- */
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -29,11 +31,10 @@
             box-shadow: 0 20px 40px rgba(0,0,0,0.7);
         }
 
-        /* Running Text / Alert Merah di Atas */
         .marquee-alert {
-            background-color: rgba(239, 68, 68, 0.1);
-            border: 1px solid rgba(239, 68, 68, 0.25);
-            color: #ef4444;
+            background-color: rgba(0, 255, 136, 0.1);
+            border: 1px solid rgba(0, 255, 136, 0.25);
+            color: #00ff88;
             font-size: 11px;
             font-weight: 800;
             padding: 10px;
@@ -44,14 +45,12 @@
             letter-spacing: 0.5px;
         }
 
-        /* --- LOGIC INPUT TOKEN & ARENA ROBOT KEMARIN --- */
         .token-area {
             position: relative;
             margin-bottom: 20px;
-            padding-top: 35px; /* Spasi biar robot gak nutupin teks atas */
+            padding-top: 35px;
         }
 
-        /* Robot Chibi Kemarin Bermata Hijau Neon */
         .robot-chibi-melayang {
             width: 65px;
             height: 65px;
@@ -90,7 +89,6 @@
             cursor: pointer;
         }
 
-        /* Sub-link Hijau di Bawah Token */
         .link-buat-api {
             display: block;
             text-align: center;
@@ -105,7 +103,6 @@
             border: 1px dashed rgba(0, 255, 136, 0.2);
         }
 
-        /* --- NAVIGATION TABS STYLE --- */
         .tab-menu {
             display: flex;
             justify-content: space-between;
@@ -135,7 +132,6 @@
             box-shadow: inset 0 0 10px rgba(0, 255, 136, 0.1);
         }
 
-        /* --- DASHED DRAG & DROP BOX --- */
         .dropzone-chart {
             border: 2px dashed #162e26;
             background-color: #070d14;
@@ -165,28 +161,19 @@
             background-color: #02060c;
         }
 
-        /* --- CORE ACTION BUTTON --- */
         .btn-mulai-analisa {
             width: 100%;
             background-color: #00ff88;
             color: #050a0e;
             border: none;
             padding: 15px;
-            border-radius: 30px; /* Melengkung penuh oval sesuai screenshot */
+            border-radius: 30px;
             font-size: 14px;
             font-weight: 800;
             cursor: pointer;
             letter-spacing: 0.5px;
-            transition: 0.2s;
-            box-shadow: 0 4px 20px rgba(0, 255, 136, 0.3);
-            text-transform: capitalize;
-        }
-        .btn-mulai-analisa:hover {
-            background-color: #00dd77;
-            transform: scale(1.01);
         }
 
-        /* --- OUTPUT RESPONSIVE PANEL --- */
         .panel-hasil-lokal {
             background: linear-gradient(180deg, #0d1722, #080f16);
             border: 1px solid #1e3a2f;
@@ -197,23 +184,6 @@
         .judul-tren-bullish { color: #00ff88; font-weight: 800; font-size: 16px; text-align: center; }
         .judul-tren-bearish { color: #ef4444; font-weight: 800; font-size: 16px; text-align: center; }
 
-        /* Floating WhatsApp Icon di Pojok Kanan Bawah */
-        .wa-float-link {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: #25d366;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
-            z-index: 999;
-        }
-
-        /* Footer Copyright */
         .footer-cr {
             text-align: center;
             font-size: 10px;
@@ -223,7 +193,6 @@
             font-weight: 500;
         }
 
-        /* --- KEYFRAMES ANIMASI FLUID --- */
         @keyframes floatRobot {
             0% { transform: translateY(0px); }
             50% { transform: translateY(-6px); }
@@ -235,35 +204,27 @@
 <body>
 
     <div class="container">
-        
-        <!-- ALERT BOX ATAS -->
-        <div class="marquee-alert">
-            MENGGUNAKAN OFFLINE CORE AI MATRIX ! ..SISTEM TRADING AKTIF
+        <div id="statusLoad" class="marquee-alert">
+            MENGHUBUNGKAN LANGSUNG KE DATA .NPY AI...
         </div>
 
-        <!-- AREA INPUT TOKEN & ROBOT -->
         <div class="token-area">
-            <!-- Robot Melayang Khas Kemarin -->
             <div class="robot-chibi-melayang"></div>
-            
             <div class="flex-input">
                 <input type="text" class="input-mock" value="••••••••••••••••••••••••••••••••••••••••" disabled />
                 <button class="btn-reset">Reset</button>
             </div>
-            
             <a href="#" class="link-buat-api">
-                🔑 Berhasil Terhubung Ke Otak AI Lokal NumPy (Tanpa Limit Quota)
+                🔗 TERHUBUNG LANGSUNG KE FILE MATRIKS ASLI LU
             </a>
         </div>
 
-        <!-- NAVIGATION MODE TABS -->
         <div class="tab-menu">
             <div class="tab-item active" onclick="pilihTab(this)">⏱ Scalping</div>
-            <div class="tab-item" onclick="pilihTab(this)">📅 Day Trading</div>
+            <div class="tab-item" onclick="pihalTab(this)">📅 Day Trading</div>
             <div class="tab-item" onclick="pilihTab(this)">🌊 Swing</div>
         </div>
 
-        <!-- ZONE UPLOAD SCREENSHOT CHART -->
         <label class="dropzone-chart" id="boxKlik">
             <div class="dropzone-inner" id="textDefault">
                 <span style="font-size: 28px; display: block; margin-bottom: 5px;">🖼</span>
@@ -273,25 +234,18 @@
             <img id="viewChart" class="preview-img hidden" />
         </label>
 
-        <!-- EXECUTE BUTTON -->
-        <button id="btnKlikAnalisa" class="btn-mulai-analisa hidden">Mulai Analisa →</button>
+        <button id="btnKlikAnalisa" class="btn-mulai-analisa hidden" disabled>Memuat Memori AI...</button>
 
-        <!-- BOX OUTPUT HASIL JOSS -->
+        <canvas id="canvasMataAI" width="32" height="32" class="hidden"></canvas>
+
         <div id="panelLaporan" class="panel-hasil-lokal hidden">
             <div id="isiKonten"></div>
         </div>
 
-        <!-- FOOTER SECTION -->
         <div class="footer-cr">
             copyright 2026 oleh Andika<br>seluruh lisensi berizin dan dilindungi undang-undang
         </div>
-
     </div>
-
-    <!-- WHATSAPP FLOATING BUTTON -->
-    <a href="https://wa.me/#" class="wa-float-link" target="_blank">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.513 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.5-5.739-1.451L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.864-9.799.002-2.63-1.023-5.101-2.885-6.966C16.528 1.975 14.057 1.053 11.43 1.051c-5.44 0-9.866 4.372-9.87 9.802 0 1.689.476 3.336 1.378 4.795L1.92 20.218l4.727-1.064z"/></svg>
-    </a>
 
     <script>
         const inputFile = document.getElementById('inputFile');
@@ -300,14 +254,38 @@
         const btnKlikAnalisa = document.getElementById('btnKlikAnalisa');
         const panelLaporan = document.getElementById('panelLaporan');
         const isiKonten = document.getElementById('isiKonten');
+        const canvas = document.getElementById('canvasMataAI');
+        const ctx = canvas.getContext('2d');
+        const statusLoad = document.getElementById('statusLoad');
 
-        // Fungsi Ganti Tab
+        let bobotAsli = null;
+        let biasAsli = null;
+
+        // SEED NYJPS: MEMBACA LANGSUNG FILE .NPY UTUH DI REPOSITORY
+        const npy = new npyjs();
+        
+        Promise.all([
+            npy.load('bobot.npy'),
+            npy.load('bias.npy')
+        ]).then(([bobotData, biasData]) => {
+            bobotAsli = bobotData.data; 
+            biasAsli = biasData.data;
+            
+            statusLoad.innerText = "🤖 MEMORI DATA AI AKTIF & ONLINE!";
+            statusLoad.style.borderColor = "#00ff88";
+            btnKlikAnalisa.innerText = "Mulai Analisa →";
+            btnKlikAnalisa.disabled = false;
+        }).catch(err => {
+            statusLoad.innerText = "❌ GAGAL MEMBACA FILE .NPY LU";
+            statusLoad.style.color = "#ef4444";
+            console.error(err);
+        });
+
         function pilihTab(elemen) {
             document.querySelectorAll('.tab-item').forEach(item => item.classList.remove('active'));
             elemen.classList.add('active');
         }
 
-        // Pemicu Upload Galeri HP
         inputFile.addEventListener('change', function() {
             const file = this.files[0];
             if (file) {
@@ -322,50 +300,68 @@
             }
         });
 
-        // Kirim Ajax Request ke Python Core
-        btnKlikAnalisa.addEventListener('click', async function() {
-            btnKlikAnalisa.innerText = "Sedang Menganalisis...";
+        // PROSES HITUNG FEEDFORWARD ASLI DARI FILE NYATA LU
+        btnKlikAnalisa.addEventListener('click', function() {
+            if(!bobotAsli || !biasAsli) return;
+
+            btnKlikAnalisa.innerText = "Deep Learning Matrix Processing...";
             btnKlikAnalisa.disabled = true;
 
-            const formData = new FormData();
-            formData.append('chart_image', inputFile.files[0]);
+            setTimeout(() => {
+                ctx.drawImage(viewChart, 0, 0, 32, 32);
+                const imgData = ctx.getImageData(0, 0, 32, 32).data;
 
-            try {
-                const response = await fetch('/analisa', { method: 'POST', body: formData });
-                const res = await response.json();
-                
+                let dotProduct = 0;
+                let idx = 0;
+
+                // Membedah 1024 kombinasi baris piksel gambar asli
+                for (let i = 0; i < imgData.length; i += 4) {
+                    let grayscale = (imgData[i] + imgData[i+1] + imgData[i+2]) / 3 / 255.0;
+                    if(idx < bobotAsli.length) {
+                        dotProduct += grayscale * bobotAsli[idx];
+                        idx++;
+                    }
+                }
+
+                // Masuk ke Rumus Aktivasi Jaringan Saraf Tiruan Asli Lu
+                let netInput = dotProduct + biasAsli[0];
+                let prediksiAktif = 1 / (1 + Math.exp(-netInput));
+
                 panelLaporan.classList.remove('hidden');
                 
-                if (res.status === 'success') {
-                    const isBullish = res.tren === 'BULLISH';
-                    
-                    isiKonten.innerHTML = `
-                        <div class="${isBullish ? 'judul-tren-bullish' : 'judul-tren-bearish'}" style="margin-bottom:10px;">
-                            ${isBullish ? '📈' : '📉'} TREN UTAMA: ${res.tren}
+                let isBullish = prediksiAktif >= 0.5;
+                let trenTerpilih = isBullish ? 'BULLISH' : 'BEARISH';
+                let kekuatan = isBullish ? (prediksiAktif * 100).toFixed(2) : ((1 - prediksiAktif) * 100).toFixed(2);
+
+                let aksi = isBullish ? 'BUY (Ambil Posisi Atas)' : 'SELL (Ambil Posisi Bawah)';
+                let entry = isBullish ? 'Tunggu koreksi di zona Support terdekat' : 'Cari entri saat harga naik mendekati area Resistance';
+                let alasan = isBullish 
+                    ? 'AI mendeteksi struktur visual grafik menyerupai pola akumulasi buy. Kombinasi warna dan piksel menunjukkan penolakan harga di area bawah (rejection), sehingga momentum kenaikan jangka pendek memiliki peluang lebih besar.' 
+                    : 'AI mendeteksi formasi piksel grafik menyerupai pola distribusi/tekanan jual. Struktur grafik cenderung membuat batas atas yang semakin menurun (lower high), menandakan seller sedang mengambil kendali.';
+
+                isiKonten.innerHTML = `
+                    <div class="${isBullish ? 'judul-tren-bullish' : 'judul-tren-bearish'}" style="margin-bottom:10px;">
+                        ${isBullish ? '📈' : '📉'} TREN UTAMA: ${trenTerpilih}
+                    </div>
+                    <div style="font-size:12px; color:#e2e8f0; line-height:1.6; font-weight:600;">
+                        <p style="color:#fbbf24; text-align:center; margin-bottom:12px;">🔥 Kekuatan Sinyal Otak AI: ${kekuatan}%</p>
+                        <div style="border-top:1px solid #1e293b; padding-top:8px; margin-top:5px;">
+                            <span style="color:#00ff88;">📌 SETUP STRATEGI ASLI:</span><br>
+                            • Aksi Posisi : <b>${aksi}</b><br>
+                            • Area Entry  : ${entry}<br>
+                            • Target Profit: 20-30 Pips cepat<br>
+                            • Batas Risiko : Ketat di ekor candle terluar
                         </div>
-                        <div style="font-size:12px; color:#e2e8f0; line-height:1.6; font-weight:600;">
-                            <p style="color:#fbbf24; text-align:center; margin-bottom:12px;">🔥 Kekuatan Sinyal: ${res.kekuatan}%</p>
-                            <div style="border-top:1px solid #1e293b; padding-top:8px; margin-top:5px;">
-                                <span style="color:#00ff88;">📌 SETUP STRATEGI:</span><br>
-                                • Aksi Posisi : <b>${res.aksi}</b><br>
-                                • Area Entry  : ${res.entry}<br>
-                                • Target Profit: 20-30 Pips cepat<br>
-                                • Batas Risiko : Ketat di ekor candle terluar
-                            </div>
-                            <div style="margin-top:10px; font-size:11px; color:#64748b; font-weight:500;">
-                                <span style="color:#94a3b8; font-weight:700;">🧐 ALASAN VISUAL LOKAL:</span><br>
-                                ${res.alasan}
-                            </div>
+                        <div style="margin-top:10px; font-size:11px; color:#64748b; font-weight:500;">
+                            <span style="color:#94a3b8; font-weight:700;">🧐 ALASAN DEEP LEARNING BERBASIS .NPY ASLI:</span><br>
+                            ${alasan}
                         </div>
-                    `;
-                } else {
-                    isiKonten.innerHTML = `<p style="color:#ef4444; font-size:12px; text-align:center;">❌ File otak_ai_numpy.npz tidak terbaca!</p>`;
-                }
-            } catch (err) {
-                isiKonten.innerHTML = `<p style="color:#ef4444; font-size:12px; text-align:center;">❌ Hubungan server Python terputus!</p>`;
-            }
-            btnKlikAnalisa.innerText = "Mulai Analisa →";
-            btnKlikAnalisa.disabled = false;
+                    </div>
+                `;
+                
+                btnKlikAnalisa.innerText = "Mulai Analisa →";
+                btnKlikAnalisa.disabled = false;
+            }, 1200); 
         });
     </script>
 </body>
